@@ -1,6 +1,11 @@
 h3{
     font-size: 60px;
     font-weight: lighter;
+    margin-top: 15vh;
+}
+
+form{
+    margin-top: calc(35vh - 60px - 5.5vh);
 }
 
 input{
@@ -9,12 +14,17 @@ input{
 }
 
 form > .inputs > input{
-    width: 48%;
+    width: calc(49% - 4vh);
     border: none;
+    padding: 0.5vh 2vh;
 }
 
 form > .button > input{
     width: 100%;
     border: none;
     border-radius: 2.5vh;
+    margin-top: 1vh;
+
+    background: dodgerblue;
+    color: white;
 }
