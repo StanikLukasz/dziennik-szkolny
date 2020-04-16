@@ -1,0 +1,20 @@
+h3{
+    font-size: 60px;
+    font-weight: lighter;
+}
+
+input{
+    height: 5vh;
+    padding: 0.5vh;
+}
+
+form > .inputs > input{
+    width: 48%;
+    border: none;
+}
+
+form > .button > input{
+    width: 100%;
+    border: none;
+    border-radius: 2.5vh;
+}

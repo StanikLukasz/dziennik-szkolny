@@ -6,11 +6,23 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{url_for('static', filename='stylesheets/main.css')}}">
+    {% block head %}{% endblock %}
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+
     <div id="screenPage">
+        <div id="sectionLeft">
+            {% block left %}
+            {% endblock %}
+        </div>
+        <div id="sectionMiddle">
+            {% block middle %}
+            {% endblock %}
+        </div>
+        <div id="sectionRight">
+            {% block right %}
+            {% endblock %}
+        </div>
 
     </div>
 
