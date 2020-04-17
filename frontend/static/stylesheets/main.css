@@ -12,17 +12,21 @@
     min-height: 100vh;
 
     background: black;
-
+    background: url(/static/images/botanical-cactus-close-up-decor-305821_tlo.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
-#sectionLeft{
+a#sectionLeft{
     background: blue;
 }
 
-#sectionMiddle{
+a#sectionMiddle{
     background: red;
 }
 
-#sectionRight{
+a#sectionRight{
     background: yellow;
 }
