@@ -16,16 +16,13 @@
 }
 
 #sectionLeft{
-    max-width: 30vw;
     background: blue;
 }
 
 #sectionMiddle{
-    max-width: 40vw;
     background: red;
 }
 
 #sectionRight{
-    max-width: 30vw;
     background: yellow;
 }

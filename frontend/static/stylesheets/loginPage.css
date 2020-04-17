@@ -1,7 +1,10 @@
-h3{
+.mainName{
     font-size: 60px;
     font-weight: lighter;
     margin-top: 15vh;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 form{
@@ -13,18 +16,39 @@ input{
     padding: 0.5vh;
 }
 
+form > .inputs{
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 50vw;
+    display: flex;
+    justify-content: space-between;
+}
+
 form > .inputs > input{
-    width: calc(49% - 4vh);
+    width: 20.5vw;
     border: none;
-    padding: 0.5vh 2vh;
+    padding: 0.5vh 2vw;
+}
+
+form > .button{
+    width: 50vw;
+    margin-top: 1vw;
+
+    margin-left: auto;
+    margin-right: auto;
 }
 
 form > .button > input{
     width: 100%;
     border: none;
     border-radius: 2.5vh;
-    margin-top: 1vh;
+    padding: 0.5vh 2vw;
 
     background: dodgerblue;
     color: white;
+}
+
+#screenPage{
+    grid-template-columns: 10vw 80vw 10vw;
 }
