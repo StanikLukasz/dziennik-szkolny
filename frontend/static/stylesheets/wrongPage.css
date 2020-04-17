@@ -1,0 +1,28 @@
+.card{
+    background: white;
+    padding: 2vw;
+    box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    width: 40vw;
+    border-radius: 1vw;
+
+    position: absolute;
+    top: 20%;
+    transform: translate(0, -50%);
+}
+
+.card > form{
+    margin-top: 5vh;
+    width: 100%;
+}
+
+.card > form > input{
+    width: 100%;
+    height: 6vh;
+
+    border: none;
+    border-radius: 2.5vh;
+    padding: 0.5vh 2vw;
+
+    background: dodgerblue;
+    color: white;
+}

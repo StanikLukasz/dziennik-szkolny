@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Wrong Page{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{url_for('static', filename='stylesheets/wrongPage.css')}}">
+{% endblock %}
+
+{% block middle %}
+<div class="card">
+    Sorry, but the URL you provided <h3>{{url}}</h3> is not valid, and thus I can't redirect you anywhere.
+
+    <form action="#" method="post">
+        <input type="submit" value="Powrót na stronę główną">
+    </form>
+</div>
+{% endblock %}
