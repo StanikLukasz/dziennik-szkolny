@@ -27,7 +27,7 @@ def loginPage():
 
 @app.route("/main-<name>-<password>")  # rozumiem to jako pierwsza strona, jaką już zalogowany użytkownik zobaczy, czyli tam gdzie będzie lista funkcji i np. tablica
 def mainPage(name, password):
-    return f"Hello {name}. I know your password. Shhh... It's {password}, am I right mate?"
+    return render_template("boardPage.html", email=name, password=password)#f"Hello {name}. I know your password. Shhh... It's {password}, am I right mate?"
 
 
 @app.route("/<wrongPageURL>")  # "pretty self explanatory", zastąpienie wadliwego adresu naszą stronką, aby nie było basic error screen'a

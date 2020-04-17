@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{url_for('static', filename='stylesheets/loggedIn.css')}}">
+    {% block innerHead %}
+    {% endblock %}
+{% endblock %}}
+
+
+{% block left %}
+<div class="mainMenu">
+    <div class="infoSection">
+        <div class="nameAndSurname">Krzysztof Boryczko</div>
+        <div class="yourEmailAdress">{{email}}</div>
+        <div class="yourPosition">Dyrektor</div>
+    </div>
+</div>
+{% endblock %}

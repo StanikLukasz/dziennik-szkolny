@@ -7,7 +7,7 @@
 
 #screenPage{
     display: grid;
-    grid-template-columns: 30vw 40vw 30vw;
+    grid-template-columns: 25vw 50vw 25vw;
     max-width: 100vw;
     min-height: 100vh;
 
