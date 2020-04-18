@@ -10,8 +10,7 @@ def startPage():
         if session["status"] == "loggedIn":
             return redirect(url_for("mainPage"))
         else:
-            # TODO tutaj zwróć stornę "You have been logged out"
-            return redirect(url_for("loginPage"))
+            return redirect(url_for("dataProblem"))
     else:
         return redirect(url_for("loginPage"))
 
@@ -39,8 +38,7 @@ def loginPage():
             if session["status"] == "loggedIn":
                 return redirect(url_for("mainPage"))
             else:
-                # TODO tutaj zwróć stornę "You have been logged out"
-                return render_template("loginPage.html")
+                return redirect(url_for("dataProblem"))
         else:
             return render_template("loginPage.html")
 
