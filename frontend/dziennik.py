@@ -1,7 +1,9 @@
 from flask import Flask, redirect, url_for, render_template, request, session
+from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = "pFosAGEabuabfaSDA"
+app.permanent_session_lifetime = timedelta(minutes=15)
 
 
 @app.route("/")  # jeśli nie jesteś zalogowany -> przekieruj na stronę logowania, w przeciwnym wypadku -> mainPage
@@ -28,6 +30,7 @@ def loginPage():
         # sprawdź tutaj czy takie konto figuruje w bazie danych, jeśli nie - zwróć error
 
         # dane sesji:
+        session.permanent = True
         session["email"] = formEmail
         session["password"] = formPassword  # to idzie później w kosz, nie chcemy hasła trzymać w sesji, używamy go jedynie do autentykacji na początku
         session["status"] = "loggedIn"
