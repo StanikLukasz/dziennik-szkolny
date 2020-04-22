@@ -1,0 +1,17 @@
+{% extends "loggedInBase.html" %}
+{% block title%}Tablica admina{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{url_for('static', filename='stylesheets/loggedIn.css')}}">
+{% endblock %}
+
+{% block middle %}
+
+<div class="container1">
+    <div class="button">
+        <a href="/main/tworzUzytkownika"><input type="button" value="Stwórz użytkownika"></a>
+        <a href="/main/ukladajPlan"><input type="button" value="Układaj plan zajęć"></a>
+    </div>
+</div>
+
+{% endblock %}
