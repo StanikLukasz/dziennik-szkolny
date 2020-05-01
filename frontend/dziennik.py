@@ -54,6 +54,8 @@ def loginPage():
         session["email"] = formEmail
         session["password"] = formPassword  # to idzie później w kosz, nie chcemy hasła trzymać w sesji, używamy go jedynie do autentykacji na początku
         session["status"] = "loggedIn"
+        session["rola"] = rola
+        session["user_id"] = user_id
 
         return redirect(url_for("mainPage"))
     else:
@@ -71,19 +73,19 @@ def mainPage():
     if "status" in session:
         if "email" in session:  # tu jest poprawna sesja
             email = session["email"]
-            return render_template("boardPage.html", email=email)
+            if "rola" in session:
+                rola = session["rola"]
+                if rola == "admin":
+                    return render_template("adminMainPage.html", rola=rola)
+                else:
+                    return render_template("boardPage.html", email=email)
+            else:
+                return render_template("boardPage.html", email=email)
         else:
             return redirect(url_for("loginPage"))
     else:
         return redirect(url_for("loginPage"))
 
-
-@app.route("/main/<rola>/<user_id>")
-def mainPage_dev(rola, user_id):
-    if rola == "admin":
-        return render_template("adminMainPage.html", rola=rola)
-    else:
-        return "witam pana " + rola
 
 @app.route("/main/tworzUzytkownika", methods=["POST", "GET"])
 def tworzUzytkownikaPage():
@@ -93,7 +95,8 @@ def tworzUzytkownikaPage():
                            "mail": request.form["mail"],
                            "telefon": request.form["telefon"],
                            "adres": request.form["adres"],
-                           "rola": request.form["rola"]
+                           "rola": request.form["rola"],
+                           "login": request.form["mail"]  # TODO generowanie loginu
                            }, db=db)
         return "Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)
     else:

@@ -9,7 +9,7 @@ class Uzytkownik:
                 db.uzytkownicy.insert_one(properties)
         else:
             if re.search("@", login) is None:
-                document = db.uzytkownicy.find_one({"login": login}) # loginen jest nazwa użytkownika
+                document = db.uzytkownicy.find_one({"login": login}) # loginem jest nazwa użytkownika
             else:
                 document = db.uzytkownicy.find_one({"mail": login}) # loginem jest adres e-mail
             if document is None:
