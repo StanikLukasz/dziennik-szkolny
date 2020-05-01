@@ -1,0 +1,34 @@
+{% extends "loggedInBase.html" %}
+{% block title%}Tablica admina{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{url_for('static', filename='stylesheets/loggedIn.css')}}">
+{% endblock %}
+
+{% block middle %}
+
+<div class="container1">
+    <div class="mainName">Stwórz nowego użytkownika</div>
+
+    <form action="#" method="post">
+        <div class="inputs">
+            <label for="imie">Imię*</label><input type="text" id="imie" name="imie">
+            <label for="nazwisko">Nazwisko*</label><input type="text" id="nazwisko" name="nazwisko">
+            <label for="mail">E-mail*</label><input type="text" id="mail" name="mail">
+            <label for="telefon">Telefon</label><input type="text" id="telefon" name="telefon">
+            <label for="adres">Adres</label><input type="text" id="adres" name="adres">
+            <label for="rola">Rola*</label>
+            <select id="rola" name="rola">
+                <option value="uczen">Uczeń</option>
+                <option value="rodzic">Rodzic</option>
+                <option value="nauczyciel">Nauczyciel</option>
+                <option value="admin">Administrator</option>
+            </select>
+        </div>
+        <div class="button">
+            <input type="submit" value="Stwórz użytkownika">
+        </div>
+    </form>
+</div>
+
+{% endblock %}
