@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Wrong Page{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{url_for('static', filename='stylesheets/wrongPage.css')}}">
+{% endblock %}
+
+{% block middle %}
+<div class="card">
+    Sorry, but the there seem to be a problem with your session data.
+    <p>To solve this problem</p>
+    <br>
+    <h3>you have been logged out.</h3>
+
+    <form action="#" method="post">
+        <input type="submit" value="Powrót na stronę logowania">
+    </form>
+</div>
+{% endblock %}
