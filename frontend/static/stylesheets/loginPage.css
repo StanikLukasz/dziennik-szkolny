@@ -58,3 +58,19 @@ form > .button > input{
 #screenPage{
     grid-template-columns: 10vw 80vw 10vw;
 }
+
+
+
+.wrongCredentials{
+    margin: 3vh auto 0 auto;
+
+    border-radius: 2.5vh;
+    border: none;
+    width: 40vw;
+
+    background-color: #A4303F;
+    color: white;
+
+    text-align: center;
+    padding: 2vh 0;
+}

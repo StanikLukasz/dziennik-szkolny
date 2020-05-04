@@ -1,12 +1,14 @@
 import sys
+sys.path.insert(1, "../backend/")
+
 from flask import Flask, redirect, url_for, render_template, request, session
 from flask_pymongo import PyMongo, pymongo
 from bson.objectid import ObjectId
 from datetime import timedelta
 import pprint
 
-sys.path.insert(1, "../backend")
 import uzytkownik as uz
+
 
 print = pprint.pprint
 
@@ -17,6 +19,7 @@ app.permanent_session_lifetime = timedelta(minutes=15)
 
 mongo = PyMongo(app)
 db = mongo.db
+
 
 
 @app.route("/")  # jeśli nie jesteś zalogowany -> przekieruj na stronę logowania, w przeciwnym wypadku -> mainPage
@@ -30,20 +33,21 @@ def startPage():
         return redirect(url_for("loginPage"))
 
 
+
 @app.route("/login", methods=["POST", "GET"])  # prosta stronka z loginem
 def loginPage():
     if request.method == "POST":
         formEmail = request.form["email"]
         formPassword = request.form["password"]
 
-        if len(formEmail) < 1 or len(formPassword) < 1:  # zabezpieczenie przed błędnym wprowadzaniem
+        if len(formEmail) < 3 or len(formPassword) < 3:  # zabezpieczenie przed błędnym wprowadzaniem
             return render_template("loginPage.html")
 
         # sprawdź tutaj czy takie konto figuruje w bazie danych, jeśli nie - zwróć error
         try:
             uzytkownik = uz.Uzytkownik(db=db, login=formEmail)
         except FileNotFoundError:
-            return "Placeholder - ERROR: Nie znaleziono uzytkownika"
+            return render_template("loginPage.html", wrongPassword=True)
         else:
             rola = uzytkownik.properties["rola"]
             user_id = uzytkownik.get_user_id()

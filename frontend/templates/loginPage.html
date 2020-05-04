@@ -16,9 +16,27 @@
 
         </div>
         <div class="button">
-            <input type="submit" value="Zaloguj">
+            <input type="submit" value="Zaloguj" disabled>
         </div>
+
+        {% if wrongPassword == True %}
+            <div class="wrongCredentials">
+                To konto nie istnieje lub podano błędne hasło.
+            </div>
+        {% endif %}
+
     </form>
 </div>
+
+<script>
+    document.addEventListener("keydown", event=>{
+        if (document.getElementsByTagName("input")[0].value.length >= 3  &&  document.getElementsByTagName("input")[1].value.length >= 3){
+            document.getElementsByTagName("input")[2].disabled = false
+        }
+        else{
+            document.getElementsByTagName("input")[2].disabled = true
+        }
+    })
+</script>
 
 {% endblock %}
