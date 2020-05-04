@@ -48,6 +48,7 @@ def loginPage():
             uzytkownik = uz.Uzytkownik(db=db, login=formEmail)
         except FileNotFoundError:
             return render_template("loginPage.html", wrongPassword=True)
+
         else:
             rola = uzytkownik.properties["rola"]
             user_id = uzytkownik.get_user_id()
@@ -56,12 +57,15 @@ def loginPage():
         # dane sesji:
         session.permanent = True
         session["email"] = formEmail
-        session["password"] = formPassword  # to idzie później w kosz, nie chcemy hasła trzymać w sesji, używamy go jedynie do autentykacji na początku
+        # session["password"] = formPassword  # to idzie później w kosz, nie chcemy hasła trzymać w sesji, używamy go jedynie do autentykacji na początku
         session["status"] = "loggedIn"
         session["rola"] = rola
         session["user_id"] = user_id
+        session["imie"] = uzytkownik.properties["imie"]
+        session["nazwisko"] = uzytkownik.properties["nazwisko"]     # TODO wymusić na każdym użytkowniku posiadanie imienia i nazwiska w bazie danych
 
         return redirect(url_for("mainPage"))
+
     else:
         if "status" in session:
             if session["status"] == "loggedIn":
@@ -72,21 +76,28 @@ def loginPage():
             return render_template("loginPage.html")
 
 
+
 @app.route("/main")  # rozumiem to jako pierwsza strona, jaką już zalogowany użytkownik zobaczy, czyli tam gdzie będzie lista funkcji i np. tablica
 def mainPage():
     if "status" in session:
-        if "email" in session:  # tu jest poprawna sesja
-            email = session["email"]
-            if "rola" in session:
-                rola = session["rola"]
-                if rola == "admin":
-                    return render_template("adminMainPage.html", rola=rola)
-                else:
-                    return render_template("boardPage.html", email=email)
-            else:
-                return render_template("boardPage.html", email=email)
-        else:
-            return redirect(url_for("loginPage"))
+        return render_template("boardPage.html", session=session)
+        # zakładajmy, że każdy użytkownik: admin, nauczyciel, rodzic, uczeń zaczynają od "tablicy powiadomień"
+        # a potem dopiero poprzez menu idą do odpowiednich sekcji
+
+    #    if "email" in session:  # tu jest poprawna sesja
+    #        email = session["email"]
+    #        if "rola" in session:
+    #            rola = session["rola"]
+    #            if rola == "admin":
+    #                return render_template("adminMainPage.html", rola=rola)
+    #            else:
+    #                return render_template("boardPage.html", email=email)
+    #        else:
+    #            return render_template("boardPage.html", email=email)
+    #    else:
+    #        return redirect(url_for("loginPage"))
+
+
     else:
         return redirect(url_for("loginPage"))
 
@@ -100,7 +111,7 @@ def tworzUzytkownikaPage():
                            "telefon": request.form["telefon"],
                            "adres": request.form["adres"],
                            "rola": request.form["rola"],
-                           "login": request.form["mail"]  # TODO generowanie loginu
+                           "login": request.form["mail"]  # TODO generowanie loginu     # TODO
                            }, db=db)
         return "Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)
     else:
