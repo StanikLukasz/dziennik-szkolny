@@ -6,6 +6,8 @@ from flask_pymongo import PyMongo, pymongo
 from bson.objectid import ObjectId
 from datetime import timedelta
 import pprint
+import json
+import os
 
 import uzytkownik as uz
 
@@ -63,6 +65,24 @@ def loginPage():
         session["user_id"] = user_id
         session["imie"] = uzytkownik.properties["imie"]
         session["nazwisko"] = uzytkownik.properties["nazwisko"]     # TODO wymusić na każdym użytkowniku posiadanie imienia i nazwiska w bazie danych
+        session["sections"] = []
+
+
+        # tutaj pobieram dane o liście kategorii, do których dana rola ma dostep
+
+        current_directory = os.path.dirname(__file__)
+        temp_path = os.path.join(current_directory, 'static', 'permissions', str(rola)+".json")
+
+        with open(temp_path) as json_file_1:
+            permission_data = json.loads(json_file_1.read())
+            session["sections"] = permission_data["sections"]           # zwracana jest już lista ścieżek do sekcji
+                                                                        # TODO pobrać dane z wszystkich plików w tych ścieżkach i w template wygenerować odpowiednią listę
+
+
+
+
+
+
 
         return redirect(url_for("mainPage"))
 
