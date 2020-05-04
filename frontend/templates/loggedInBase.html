@@ -10,9 +10,9 @@
 {% block left %}
 <div class="mainMenu">
     <div class="infoSection">
-        <div class="nameAndSurname">Krzysztof Boryczko</div>
-        <div class="yourEmailAdress">{{email}}</div>
-        <div class="yourPosition">Dyrektor</div>
+        <div class="nameAndSurname">{{ session["imie"].capitalize() }} {{ session["nazwisko"].capitalize() }} </div>
+        <div class="yourEmailAdress">{{ session["email"] }}</div>
+        <div class="yourPosition">{{ session["rola"].capitalize() }}</div>
     </div>
 </div>
 {% endblock %}
