@@ -1,0 +1,4 @@
+{
+  "rola": "admin",
+  "sections": ["../sections/boardPage.json"]
+}
