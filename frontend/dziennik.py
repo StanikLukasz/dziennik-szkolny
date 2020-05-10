@@ -1,4 +1,5 @@
 import sys
+
 sys.path.insert(1, "../backend/")
 
 from flask import Flask, redirect, url_for, render_template, request, session
@@ -23,82 +24,74 @@ mongo = PyMongo(app)
 db = mongo.db
 
 
-
 @app.route("/")  # jeśli nie jesteś zalogowany -> przekieruj na stronę logowania, w przeciwnym wypadku -> mainPage
 def startPage():
     if "status" in session:
         if session["status"] == "loggedIn":
-            return redirect(url_for("mainPage"))
+            return redirect(url_for("main_page"))
         else:
-            return redirect(url_for("dataProblem"))
+            return redirect(url_for("data_problem"))
     else:
-        return redirect(url_for("loginPage"))
-
+        return redirect(url_for("login_page"))
 
 
 @app.route("/login", methods=["POST", "GET"])  # prosta stronka z loginem
-def loginPage():
+def login_page():
     if request.method == "POST":
-        formEmail = request.form["email"]
-        formPassword = request.form["password"]
+        form_email = request.form["email"]
+        form_password = request.form["password"]
 
-        if len(formEmail) < 3 or len(formPassword) < 3:  # zabezpieczenie przed błędnym wprowadzaniem
+        if len(form_email) < 3 or len(form_password) < 3:  # zabezpieczenie przed błędnym wprowadzaniem
             return render_template("loginPage.html")
 
         # sprawdź tutaj czy takie konto figuruje w bazie danych, jeśli nie - zwróć error
         try:
-            uzytkownik = uz.Uzytkownik(db=db, login=formEmail)
+            uzytkownik = uz.Uzytkownik(db=db, login=form_email)
         except FileNotFoundError:
             return render_template("loginPage.html", wrongPassword=True)
 
         else:
             rola = uzytkownik.properties["rola"]
             user_id = uzytkownik.get_user_id()
-            # return redirect(url_for("mainPage_dev", rola=rola, user_id=user_id)) DEV
+            return redirect(url_for("mainPage_dev", rola=rola, user_id=user_id))  # DEV
 
         # dane sesji:
         session.permanent = True
-        session["email"] = formEmail
-        # session["password"] = formPassword  # to idzie później w kosz, nie chcemy hasła trzymać w sesji, używamy go jedynie do autentykacji na początku
+        session["email"] = form_email
+        # session["password"] = form_password  # to idzie później w kosz, nie chcemy hasła trzymać w sesji, używamy go jedynie do autentykacji na początku
         session["status"] = "loggedIn"
         session["rola"] = rola
         session["user_id"] = user_id
         session["imie"] = uzytkownik.properties["imie"]
-        session["nazwisko"] = uzytkownik.properties["nazwisko"]     # TODO wymusić na każdym użytkowniku posiadanie imienia i nazwiska w bazie danych
+        session["nazwisko"] = uzytkownik.properties[
+            "nazwisko"]  # TODO wymusić na każdym użytkowniku posiadanie imienia i nazwiska w bazie danych
         session["sections"] = []
-
 
         # tutaj pobieram dane o liście kategorii, do których dana rola ma dostep
 
         current_directory = os.path.dirname(__file__)
-        temp_path = os.path.join(current_directory, 'static', 'permissions', str(rola)+".json")
+        temp_path = os.path.join(current_directory, 'static', 'permissions', str(rola) + ".json")
 
         with open(temp_path) as json_file_1:
             permission_data = json.loads(json_file_1.read())
-            session["sections"] = permission_data["sections"]           # zwracana jest już lista ścieżek do sekcji
-                                                                        # TODO pobrać dane z wszystkich plików w tych ścieżkach i w template wygenerować odpowiednią listę
+            session["sections"] = permission_data["sections"]  # zwracana jest już lista ścieżek do sekcji
+            # TODO pobrać dane z wszystkich plików w tych ścieżkach i w template wygenerować odpowiednią listę
 
-
-
-
-
-
-
-        return redirect(url_for("mainPage"))
+        return redirect(url_for("main_page"))
 
     else:
         if "status" in session:
             if session["status"] == "loggedIn":
-                return redirect(url_for("mainPage"))
+                return redirect(url_for("main_page"))
             else:
-                return redirect(url_for("dataProblem"))
+                return redirect(url_for("data_problem"))
         else:
             return render_template("loginPage.html")
 
 
-
-@app.route("/main")  # rozumiem to jako pierwsza strona, jaką już zalogowany użytkownik zobaczy, czyli tam gdzie będzie lista funkcji i np. tablica
-def mainPage():
+@app.route(
+    "/main")  # rozumiem to jako pierwsza strona, jaką już zalogowany użytkownik zobaczy, czyli tam gdzie będzie lista funkcji i np. tablica
+def main_page():
     if "status" in session:
         return render_template("boardPage.html", session=session)
         # zakładajmy, że każdy użytkownik: admin, nauczyciel, rodzic, uczeń zaczynają od "tablicy powiadomień"
@@ -117,55 +110,56 @@ def mainPage():
     #    else:
     #        return redirect(url_for("loginPage"))
 
-
     else:
-        return redirect(url_for("loginPage"))
+        return redirect(url_for("login_page"))
 
 
 @app.route("/main/tworzUzytkownika", methods=["POST", "GET"])
-def tworzUzytkownikaPage():
+def tworz_uzytkownika_page():
     if request.method == "POST":
         nowy_uzytkownik = uz.Uzytkownik(properties={"imie": request.form["imie"],
-                           "nazwisko": request.form["nazwisko"],
-                           "mail": request.form["mail"],
-                           "telefon": request.form["telefon"],
-                           "adres": request.form["adres"],
-                           "rola": request.form["rola"],
-                           "login": request.form["mail"]  # TODO generowanie loginu     # TODO
-                           }, db=db)
+                                                    "nazwisko": request.form["nazwisko"],
+                                                    "mail": request.form["mail"],
+                                                    "telefon": request.form["telefon"],
+                                                    "adres": request.form["adres"],
+                                                    "rola": request.form["rola"],
+                                                    "login": request.form["mail"]  # TODO generowanie loginu     # TODO
+                                                    }, db=db)
         return "Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)
     else:
         return render_template("tworzUzytkownika.html")
 
 
 @app.route("/main/ukladajPlan")
-def ukladajPlanPage():
+def ukladaj_plan_page():
     return "placeholder"
 
 
 @app.route("/logout", methods=["POST", "GET"])
-def logoutPage():
+def logout_page():
     if request.method == "GET":
         try:
             session.clear()
             return render_template("logoutPage.html")
         except:
-            return render_template(url_for("dataProblem"))
+            return render_template(url_for("data_problem"))
     else:
-        return redirect(url_for("loginPage"))
+        return redirect(url_for("login_page"))
 
 
-@app.route("/dataProblem", methods=["POST", "GET"])  # kiedy np. braknie gdzieś twojego maila w sesji, bądź czas sesji się skończy
-def dataProblem():
+@app.route("/dataProblem",
+           methods=["POST", "GET"])  # kiedy np. braknie gdzieś twojego maila w sesji, bądź czas sesji się skończy
+def data_problem():
     if request.method == "GET":
         session.clear()
         return render_template("dataProblem.html")
     else:
-        return redirect(url_for("loginPage"))
+        return redirect(url_for("login_page"))
 
 
-@app.route("/<wrongPageURL>", methods=["POST", "GET"])  # "pretty self explanatory", zastąpienie wadliwego adresu naszą stronką, aby nie było basic error screen'a
-def wrongPage(wrongPageURL):
+@app.route("/<wrongPageURL>", methods=["POST",
+                                       "GET"])  # "pretty self explanatory", zastąpienie wadliwego adresu naszą stronką, aby nie było basic error screen'a
+def wrong_page(wrongPageURL):
     if request.method == "GET":
         return render_template("wrongPage.html", url=wrongPageURL)
     else:
