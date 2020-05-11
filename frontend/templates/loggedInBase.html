@@ -15,14 +15,15 @@
         <div class="yourPosition">{{ session["rola"].capitalize() }}</div>
     </div>
 
+    {% for x in session["sections"] %}
 
-    <div class="section">
-        <img class="icon">
-        <div class="title">
-            {{ session["sections"] }}
+        <div class="section">
+            <img class="icon" src="{{ url_for('static', filename=x["icon"][0]) }}">
+            <div class="title">
+                {{ x["displayName"] }}
+            </div>
         </div>
-    </div>
-
+    {% endfor %}
 
 
 </div>

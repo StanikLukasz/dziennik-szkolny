@@ -53,7 +53,7 @@ def login_page():
         else:
             rola = uzytkownik.properties["rola"]
             user_id = uzytkownik.get_user_id()
-            return redirect(url_for("mainPage_dev", rola=rola, user_id=user_id))  # DEV
+            #return redirect(url_for("mainPage_dev", rola=rola, user_id=user_id))  # DEV
 
         # dane sesji:
         session.permanent = True
@@ -74,8 +74,21 @@ def login_page():
 
         with open(temp_path) as json_file_1:
             permission_data = json.loads(json_file_1.read())
-            session["sections"] = permission_data["sections"]  # zwracana jest już lista ścieżek do sekcji
+            for x in permission_data["sections"]:
+
+                inner_file_path = os.path.join(current_directory, x)
+                with open(inner_file_path) as json_file_2:
+                    temp_data = json.loads(json_file_2.read())
+
+                    session["sections"].append(temp_data)
+
+
+
+            #session["sections"] = permission_data["sections"]  # zwracana jest już lista ścieżek do sekcji
             # TODO pobrać dane z wszystkich plików w tych ścieżkach i w template wygenerować odpowiednią listę
+
+
+
 
         return redirect(url_for("main_page"))
 
