@@ -43,6 +43,8 @@ input{
     align-items: center;
     justify-content: center;
     width: 50%;
+
+    margin: 0 auto;
 }
 
 .extend > .inner{

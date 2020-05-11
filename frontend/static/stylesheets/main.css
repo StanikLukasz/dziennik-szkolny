@@ -17,16 +17,44 @@
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+
+
+    overflow: hidden;
 }
 
-a#sectionLeft{
-    background: blue;
+
+#sectionMiddle{
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    height: 100vh;
 }
 
-a#sectionMiddle{
-    background: red;
+
+
+.popups{
+    display: flex;
+    flex-direction: column-reverse;
+
+    width: 30%;
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    align-items: end;
 }
 
-a#sectionRight{
-    background: yellow;
+.popup{
+    display: inline-block;
+    padding: 2vh;
+
+    border: 2px solid white;
+    border-radius: 3vh;
+
+    background: #65B891;
+    color: white;
+    width: max-content;
+}
+
+.popup > a{
+    margin-left: 1vh;
 }

@@ -7,6 +7,16 @@
 
 {% block middle %}
 
+{% if popups!=[] %}
+    <div class="popups">
+        {% for popup in popups %}
+            <div class="popup">
+                {{ popup }}
+                <a onclick="this.parentNode.style['display'] = 'none'">X</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
 
 
 <form class="forms" action="#" method="post">
