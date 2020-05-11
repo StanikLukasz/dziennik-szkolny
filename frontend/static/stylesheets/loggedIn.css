@@ -26,21 +26,21 @@
     font-size: 1vw;
 }
 
+
+
+a:active, a:hover, a:visited, a:link{
+    text-decoration: none;
+    color: initial;
+}
 .section{
     width: 100%;
-    background: rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.05);
     margin: 0.5vh 0;
     display: flex;
     justify-content: space-evenly;
 
     border-top: 2px solid rgba(0,0,0,0.05);
     border-bottom: 2px solid rgba(0,0,0,0.05);
-}
-
-
-a:active, a:hover, a:visited, a:link{
-    text-decoration: none;
-    color: initial;
 }
 
 .section > .title{
@@ -57,3 +57,6 @@ a:active, a:hover, a:visited, a:link{
     background: rgba(30,144,255,0.2)
 }
 
+.section:last-of-type{
+    margin-top: 1vh;
+}
