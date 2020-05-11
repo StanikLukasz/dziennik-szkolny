@@ -58,7 +58,6 @@ def login_page():
         # dane sesji:
         session.permanent = True
         session["email"] = form_email
-        # session["password"] = form_password  # to idzie później w kosz, nie chcemy hasła trzymać w sesji, używamy go jedynie do autentykacji na początku
         session["status"] = "loggedIn"
         session["rola"] = rola
         session["user_id"] = user_id
@@ -81,14 +80,6 @@ def login_page():
 
                     temp_data = json.loads(json_file_2.read())
                     session["sections"].append(temp_data)
-
-
-
-            #session["sections"] = permission_data["sections"]  # zwracana jest już lista ścieżek do sekcji
-            # TODO pobrać dane z wszystkich plików w tych ścieżkach i w template wygenerować odpowiednią listę
-
-
-
 
         return redirect(url_for("main_page"))
 
@@ -191,8 +182,7 @@ def logout_page():
         return redirect(url_for("login_page"))
 
 
-@app.route("/dataProblem",
-           methods=["POST", "GET"])  # kiedy np. braknie gdzieś twojego maila w sesji, bądź czas sesji się skończy
+@app.route("/dataProblem", methods=["POST", "GET"])  # kiedy np. czas sesji się skończy
 def data_problem():
     if request.method == "GET":
         session.clear()
@@ -201,8 +191,7 @@ def data_problem():
         return redirect(url_for("login_page"))
 
 
-@app.route("/<wrongPageURL>", methods=["POST",
-                                       "GET"])  # "pretty self explanatory", zastąpienie wadliwego adresu naszą stronką, aby nie było basic error screen'a
+@app.route("/<wrongPageURL>", methods=["POST", "GET"])  # "pretty self explanatory"
 def wrong_page(wrongPageURL):
     if request.method == "GET":
         return render_template("wrongPage.html", url=wrongPageURL)
