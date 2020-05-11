@@ -1,8 +1,8 @@
 {% extends "loggedInBase.html" %}
 {% block title%}Tablica admina{% endblock %}
 
-{% block head %}
-<link rel="stylesheet" href="{{url_for('static', filename='stylesheets/loggedIn.css')}}">
+{% block innerHead %}
+<link rel="stylesheet" href="{{url_for('static', filename='stylesheets/tworzUzytkownika.css')}}">
 {% endblock %}
 
 {% block middle %}
@@ -10,20 +10,32 @@
 <div class="container1">
     <div class="mainName">Stwórz nowego użytkownika</div>
 
+     {% if newLogin is defined %}
+        <div class="userCreateConfirmation">
+            Pomyślnie dodano nowego użytkownika w roli {{ rola }} o loginie: {{ newLogin }}
+        </div>
+    {% endif %}
+
+     {% if duplicatedMailError == True %}
+        <div class="userCreateConfirmation">
+            <b>Podany adres e-mail jest już przypisany do innego użytkownika! Spróbuj ponownie.</b>
+        </div>
+    {% endif %}
+
     <form action="#" method="post">
         <div class="inputs">
-            <label for="imie">Imię*</label><input type="text" id="imie" name="imie">
-            <label for="nazwisko">Nazwisko*</label><input type="text" id="nazwisko" name="nazwisko">
-            <label for="mail">E-mail*</label><input type="text" id="mail" name="mail">
-            <label for="telefon">Telefon</label><input type="text" id="telefon" name="telefon">
-            <label for="adres">Adres</label><input type="text" id="adres" name="adres">
+            <label for="imie">Imię*</label><input type="text" id="imie" name="imie" required><br>
+            <label for="nazwisko">Nazwisko*</label><input type="text" id="nazwisko" name="nazwisko" required><br>
+            <label for="mail">E-mail*</label><input type="email" id="mail" name="mail" required><br>
+            <label for="telefon">Telefon</label><input type="text" id="telefon" name="telefon"><br>
+            <label for="adres">Adres</label><input type="text" id="adres" name="adres"><br>
             <label for="rola">Rola*</label>
-            <select id="rola" name="rola">
+            <select id="rola" name="rola" required>
                 <option value="uczen">Uczeń</option>
                 <option value="rodzic">Rodzic</option>
                 <option value="nauczyciel">Nauczyciel</option>
                 <option value="admin">Administrator</option>
-            </select>
+            </select><br>
         </div>
         <div class="button">
             <input type="submit" value="Stwórz użytkownika">

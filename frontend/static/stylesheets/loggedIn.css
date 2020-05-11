@@ -25,3 +25,15 @@
     font-weight: 200;
     font-size: 1vw;
 }
+
+form > .logout > input{
+    margin: 3vh;
+    position: absolute;
+    bottom: 10vh;
+    background-color: darkred;
+    color: white;
+    border-radius: 2.5vh;
+    border: none;
+    width: 10vw;
+    height: 5vh;
+}

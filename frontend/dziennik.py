@@ -2,6 +2,7 @@ import sys
 
 sys.path.insert(1, "../backend/")
 
+from flask_cachebuster import CacheBuster
 from flask import Flask, redirect, url_for, render_template, request, session
 from flask_pymongo import PyMongo, pymongo
 from bson.objectid import ObjectId
@@ -19,6 +20,10 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/dziennik-dev"
 app.secret_key = "pFosAGEabuabfaSDAd"
 app.permanent_session_lifetime = timedelta(minutes=15)
+
+config = { 'extensions': ['.js', '.css', '.csv'], 'hash_size': 5 }
+cache_buster = CacheBuster(config=config)
+cache_buster.init_app(app)
 
 mongo = PyMongo(app)
 db = mongo.db
@@ -53,11 +58,11 @@ def login_page():
         else:
             rola = uzytkownik.properties["rola"]
             user_id = uzytkownik.get_user_id()
-            return redirect(url_for("mainPage_dev", rola=rola, user_id=user_id))  # DEV
+            # return redirect(url_for("main_page_dev", rola=rola, user_id=user_id))  # DEV
 
         # dane sesji:
         session.permanent = True
-        session["email"] = form_email
+        session["email"] = uzytkownik.properties["email"]
         # session["password"] = form_password  # to idzie później w kosz, nie chcemy hasła trzymać w sesji, używamy go jedynie do autentykacji na początku
         session["status"] = "loggedIn"
         session["rola"] = rola
@@ -89,8 +94,7 @@ def login_page():
             return render_template("loginPage.html")
 
 
-@app.route(
-    "/main")  # rozumiem to jako pierwsza strona, jaką już zalogowany użytkownik zobaczy, czyli tam gdzie będzie lista funkcji i np. tablica
+@app.route("/main")  # rozumiem to jako pierwsza strona, jaką już zalogowany użytkownik zobaczy, czyli tam gdzie będzie lista funkcji i np. tablica
 def main_page():
     if "status" in session:
         return render_template("boardPage.html", session=session)
@@ -117,15 +121,20 @@ def main_page():
 @app.route("/main/tworzUzytkownika", methods=["POST", "GET"])
 def tworz_uzytkownika_page():
     if request.method == "POST":
-        nowy_uzytkownik = uz.Uzytkownik(properties={"imie": request.form["imie"],
-                                                    "nazwisko": request.form["nazwisko"],
-                                                    "mail": request.form["mail"],
-                                                    "telefon": request.form["telefon"],
-                                                    "adres": request.form["adres"],
-                                                    "rola": request.form["rola"],
-                                                    "login": request.form["mail"]  # TODO generowanie loginu     # TODO
-                                                    }, db=db)
-        return "Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)
+        try:
+            nowy_uzytkownik = uz.Uzytkownik(properties={"imie": request.form["imie"],
+                                                        "nazwisko": request.form["nazwisko"],
+                                                        "email": request.form["mail"],
+                                                        "telefon": request.form["telefon"],
+                                                        "adres": request.form["adres"],
+                                                        "rola": request.form["rola"],
+                                                        "login": request.form["mail"]  # TODO generowanie loginu     # TODO
+                                                        }, db=db)
+        except pymongo.errors.DuplicateKeyError:
+            return render_template("tworzUzytkownika.html",
+                                   duplicatedMailError=True)
+        return render_template("tworzUzytkownika.html",
+                               newLogin=nowy_uzytkownik.properties["login"], rola=nowy_uzytkownik.properties["rola"])
     else:
         return render_template("tworzUzytkownika.html")
 
@@ -174,9 +183,9 @@ if __name__ == "__main__":
     if db.uzytkownicy.find_one({"login": "admin"}) is None:
         admin_user_0 = {"login": "admin",
                         "haslo": "admin",
-                        "imie": "Admin",
+                        "imie": "Administrator",
                         "nazwisko": "",
-                        "mail": "",
+                        "email": "admin@mail.to",
                         "telefon": "",
                         "rola": "admin"
                         }
