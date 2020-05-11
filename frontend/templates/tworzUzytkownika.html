@@ -7,28 +7,98 @@
 
 {% block middle %}
 
-<div class="container1">
-    <div class="mainName">Stwórz nowego użytkownika</div>
 
-    <form action="#" method="post">
-        <div class="inputs">
-            <label for="imie">Imię*</label><input type="text" id="imie" name="imie">
-            <label for="nazwisko">Nazwisko*</label><input type="text" id="nazwisko" name="nazwisko">
-            <label for="mail">E-mail*</label><input type="text" id="mail" name="mail">
-            <label for="telefon">Telefon</label><input type="text" id="telefon" name="telefon">
-            <label for="adres">Adres</label><input type="text" id="adres" name="adres">
-            <label for="rola">Rola*</label>
-            <select id="rola" name="rola">
-                <option value="uczen">Uczeń</option>
-                <option value="rodzic">Rodzic</option>
-                <option value="nauczyciel">Nauczyciel</option>
-                <option value="admin">Administrator</option>
-            </select>
-        </div>
-        <div class="button">
-            <input type="submit" value="Stwórz użytkownika">
-        </div>
-    </form>
+
+<form class="forms" action="#" method="post">
+    <input class="hidden" name="hidden" id="hidden" type="number" value="0">
+    <div>
+        Imię
+    </div>
+    <div>
+        Nazwisko
+    </div>
+    <div>
+        E-mail
+    </div>
+    <div>
+        Hasło
+    </div>
+    <div>
+        Rola
+    </div>
+    <div>
+        Telefon
+    </div>
+    <div>
+        Adres
+    </div>
+
+    <input type="text" id="imie_0" name="imie_0">
+    <input type="text" id="nazwisko_0" name="nazwisko_0">
+    <input type="text" id="email_0" name="email_0">
+    <input type="password" id="password_0" name="password_0">
+    <select id="rola_0" name="rola_0">
+        <option value="uczen" selected="selected">Uczeń</option>
+        <option value="rodzic">Rodzic</option>
+        <option value="nauczyciel">Nauczyciel</option>
+        <option value="dyrektor">Dyrektor</option>
+        <option value="admin">Administrator</option>
+    </select>
+    <input type="tel" id="telefon_0" name="telefon_0">
+    <input type="text" id="adres_0" name="adres_0">
+    <div class="hidden" id="spacer"></div>
+
+    <div class="button">
+        <input type="submit" value="Stwórz użytkowników">
+    </div>
+</form>
+
+
+
+<div class="extend">
+    <div class="inner">
+        Stwórz
+    <input type="number" value="1">
+    nowych pól
+    </div>
+    <div class="buttonJS" onclick="generateNewForms()">
+
+        Utwórz
+    </div>
 </div>
 
+
+
+
+
+<script>
+    function generateNewForms(){
+        amount = document.getElementsByClassName("extend")[0].getElementsByTagName("input")[0].value
+        console.log(amount)
+        let temp = amount
+        amount = temp
+
+        ostatni_indeks = parseInt(document.getElementById("hidden").getAttribute("value"))
+        miejsce = document.getElementById("spacer")
+
+        for(i=parseInt(ostatni_indeks)+parseInt(1); i<parseInt(amount)+parseInt(ostatni_indeks)+parseInt(1); i = i+1){
+            miejsce.insertAdjacentHTML('beforebegin', `
+                <input type="text" id="imie_${i}" name="imie_${i}">
+                <input type="text" id="nazwisko_${i}" name="nazwisko_${i}">
+                <input type="text" id="email_${i}" name="email_${i}">
+                <input type="password" id="password_${i}" name="password_${i}">
+                <select id="rola_${i}" name="rola_${i}">
+                    <option value="uczen" selected="selected">Uczeń</option>
+                    <option value="rodzic">Rodzic</option>
+                    <option value="nauczyciel">Nauczyciel</option>
+                    <option value="dyrektor">Dyrektor</option>
+                    <option value="admin">Administrator</option>
+                </select>
+                <input type="tel" id="telefon_${i}" name="telefon_${i}">
+                <input type="text" id="adres_${i}" name="adres_${i}">
+            `);
+        }
+        document.getElementById("hidden").setAttribute("value", (parseInt(amount) + parseInt(ostatni_indeks)));
+    }
+</script>
 {% endblock %}

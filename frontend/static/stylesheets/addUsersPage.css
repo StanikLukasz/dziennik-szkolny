@@ -1,0 +1,60 @@
+.hidden{
+    display: none;
+}
+
+input{
+    height: 3vh;
+    padding: 0.5vh;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 0.5vh;
+}
+
+
+.forms{
+    width: 90%;
+    margin: 2.5vh auto;
+
+    display: grid;
+    grid-template-columns: 10% 10% 20% 10% 10% 10% 20%;
+    justify-content: space-around;
+    grid-row-gap: 3px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.extend{
+    background: dodgerblue;
+    display: inline-block;
+    height: 5vh;
+    padding: 1vh;
+    border-radius: 3.5vh;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+
+.extend > .inner{
+    width: 50%;
+}
+
+.extend > .inner > input{
+    width: 20%
+}
+
+.extend > .buttonJS{
+    border: 1px solid white;
+    padding: 1vh 2vh;
+    border-radius: 0.5vh;
+}
