@@ -1,4 +1,4 @@
 {
   "rola": "admin",
-  "sections": ["static/sections/boardPage.json", "static/sections/logoutPage.json"]
+  "sections": ["static/sections/boardPage.json", "static/sections/addUsersPage.json", "static/sections/logoutPage.json"]
 }

@@ -1,0 +1,6 @@
+{
+  "name": "addUsersPage",
+  "icon": "images/icons/baseline_account_box_black_36dp.png",
+  "displayName": "Dodaj nowych uzytkownikow",
+  "href": "addUser"
+}
