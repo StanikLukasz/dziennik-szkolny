@@ -1,4 +1,5 @@
 {
   "name": "boardPage",
-  "icon": "../images/icons/baseline_chrome_reader_mode_black_36dp.png"
+  "icon": "images/icons/baseline_chrome_reader_mode_black_36dp.png",
+  "displayName": "Tablica"
 }

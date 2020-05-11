@@ -1,4 +1,4 @@
 {
   "rola": "rodzic",
-  "sections": ["../sections/boardPage.json"]
+  "sections": ["static/sections/boardPage.json"]
 }
