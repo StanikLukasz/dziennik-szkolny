@@ -127,7 +127,7 @@ def main_page():
         return redirect(url_for("login_page"))
 
 
-@app.route("/addUser", methods=["POST", "GET"])
+@app.route("/addUsers", methods=["POST", "GET"])
 def tworz_uzytkownika_page():
     if "status" in session:
         if session["status"] == "loggedIn":
