@@ -1,4 +1,4 @@
 {
   "rola": "uczen",
-  "sections": ["static/sections/boardPage.json"]
+  "sections": ["static/sections/boardPage.json", "static/sections/logoutPage.json"]
 }
