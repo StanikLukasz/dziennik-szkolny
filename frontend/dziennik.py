@@ -127,20 +127,34 @@ def main_page():
         return redirect(url_for("login_page"))
 
 
-@app.route("/main/tworzUzytkownika", methods=["POST", "GET"])
+@app.route("/addUser", methods=["POST", "GET"])
 def tworz_uzytkownika_page():
-    if request.method == "POST":
-        nowy_uzytkownik = uz.Uzytkownik(properties={"imie": request.form["imie"],
-                                                    "nazwisko": request.form["nazwisko"],
-                                                    "mail": request.form["mail"],
-                                                    "telefon": request.form["telefon"],
-                                                    "adres": request.form["adres"],
-                                                    "rola": request.form["rola"],
-                                                    "login": request.form["mail"]  # TODO generowanie loginu     # TODO
-                                                    }, db=db)
-        return "Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)
-    else:
-        return render_template("tworzUzytkownika.html")
+    if "status" in session:
+        if session["status"] == "loggedIn":
+            temp_sections = session["sections"]
+            flag_is_allowed = False
+            for temp_section in session["sections"]:
+                if temp_section["name"] == "addUsersPage":
+                    flag_is_allowed = True
+                    break
+            if flag_is_allowed:
+                if request.method == "POST":
+                    nowy_uzytkownik = uz.Uzytkownik(properties={"imie": request.form["imie"],
+                                                                "nazwisko": request.form["nazwisko"],
+                                                                "mail": request.form["mail"],
+                                                                "telefon": request.form["telefon"],
+                                                                "adres": request.form["adres"],
+                                                                "rola": request.form["rola"],
+                                                                "login": request.form["mail"]
+                                                                # TODO generowanie loginu     # TODO
+                                                                }, db=db)
+                    return "Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)
+                else:
+                    return render_template("tworzUzytkownika.html")
+
+    return redirect(url_for("data_problem"))
+
+
 
 
 @app.route("/main/ukladajPlan")
