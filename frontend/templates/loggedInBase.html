@@ -17,12 +17,12 @@
 
     {% for x in session["sections"] %}
 
-        <div class="section">
+        <a class="section" href={{ x["href"] }}>
             <img class="icon" src="{{ url_for('static', filename=x["icon"]) }}">
             <div class="title">
                 {{ x["displayName"] }}
             </div>
-        </div>
+        </a>
     {% endfor %}
 
 

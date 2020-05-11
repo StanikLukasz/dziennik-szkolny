@@ -38,6 +38,11 @@
 }
 
 
+a:active, a:hover, a:visited, a:link{
+    text-decoration: none;
+    color: initial;
+}
+
 .section > .title{
     margin: auto 0;
     font-size: 2.5vh;
@@ -51,3 +56,4 @@
 .section:hover{
     background: rgba(30,144,255,0.2)
 }
+
