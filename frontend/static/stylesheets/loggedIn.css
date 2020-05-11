@@ -46,6 +46,7 @@ a:active, a:hover, a:visited, a:link{
 .section > .title{
     margin: auto 0;
     font-size: 2.5vh;
+    width: min-content;
 }
 
 .section > .icon{
