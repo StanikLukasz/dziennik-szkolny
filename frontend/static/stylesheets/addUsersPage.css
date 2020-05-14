@@ -2,7 +2,7 @@
     display: none;
 }
 
-input{
+input, .button > select{
     height: 3vh;
     padding: 0.5vh;
     border: 1px solid rgba(0,0,0,0.2);
@@ -59,4 +59,42 @@ input{
     border: 1px solid white;
     padding: 1vh 2vh;
     border-radius: 0.5vh;
+}
+
+
+
+.buttons{
+    grid-column:  -1 / 1;
+    display: grid;
+    grid-template-columns: 45% 45%;
+    justify-content: space-around;
+}
+
+.button{
+    background: dodgerblue;
+    display: inline-block;
+    height: 5vh;
+    padding: 1vh;
+    border-radius: 3.5vh;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    margin: 2vh auto;
+}
+
+.button > input{
+    height: 5vh;
+    border: 1px solid white;
+    padding: 1vh 2vh;
+    border-radius: 0.5vh;
+
+    background: dodgerblue;
+    color: white;
+}
+.button > select{
+    height: 5vh;
 }
