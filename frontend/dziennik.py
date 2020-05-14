@@ -14,7 +14,6 @@ import os
 import uzytkownik as uz
 import group
 
-
 print = pprint.pprint
 
 app = Flask(__name__)
@@ -28,7 +27,6 @@ cache_buster.init_app(app)
 
 mongo = PyMongo(app)
 db = mongo.db
-
 
 @app.route("/")  # jeśli nie jesteś zalogowany -> przekieruj na stronę logowania, w przeciwnym wypadku -> mainPage
 def startPage():
@@ -161,9 +159,11 @@ def tworz_uzytkownika_page():
                         nowy_uzytkownik = uz.Uzytkownik(properties=temp_properties, db=db)
 
                     popup = "Poprawnie dodano {} nowych użytkowników.".format(how_many_new_users+1)
-                    return render_template("tworzUzytkownika.html", popups=[popup]) #"Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)
+                    group_names = group.get_all_group_names(db=db)
+                    return render_template("tworzUzytkownika.html", groupNames=group_names,  popups=[popup]) #"Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)
                 else:
-                    return render_template("tworzUzytkownika.html")
+                    group_names = group.get_all_group_names(db=db)
+                    return render_template("tworzUzytkownika.html", groupNames=group_names)
 
     return redirect(url_for("data_problem"))
 
@@ -254,6 +254,8 @@ def wrong_page(wrongPageURL):
 if __name__ == "__main__":
     uz1 = uz.Uzytkownik()
     uz1.properties = {"sdfsdf": "sdsdfb", "sdfbsd": "sdifbdsiuf"}
+
+    db.uzytkownicy.drop()
 
     print("DEBUG: dziennik - główny moduł")
     if db.uzytkownicy.find_one({"login": "admin"}) is None:

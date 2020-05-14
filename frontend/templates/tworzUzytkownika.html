@@ -58,9 +58,22 @@
     <input type="text" id="adres_0" name="adres_0">
     <div class="hidden" id="spacer"></div>
 
-    <div class="button">
-        <input type="submit" value="Stwórz użytkowników">
+    <div class="buttons">
+        <div class="button">
+            <input type="submit" value="Stwórz użytkowników">
+        </div>
+        <div class="button" style="display:grid; grid-template-columns: auto auto; justify-content: center; grid-column-gap: 10px">
+            <select id="group_name" name="group_name">
+                {% for groupName in groupNames %}
+                    <option value="{{ groupName }}">{{ groupName }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Dodaj do klasy">
+        </div>
     </div>
+
+
+
 </form>
 
 
