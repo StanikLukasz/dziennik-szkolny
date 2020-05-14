@@ -1,2 +1,3 @@
 Flask==1.1.2
 Flask-PyMongo==2.3.0
+Flask-CacheBuster==1.0.0
