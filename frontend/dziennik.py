@@ -2,6 +2,7 @@ import sys
 
 sys.path.insert(1, "../backend/")
 
+from flask_cachebuster import CacheBuster
 from flask import Flask, redirect, url_for, render_template, request, session
 from flask_pymongo import PyMongo, pymongo
 from bson.objectid import ObjectId
@@ -19,6 +20,10 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/dziennik-dev"
 app.secret_key = "pFosAGEabuabfaSDAd"
 app.permanent_session_lifetime = timedelta(minutes=15)
+
+config = { 'extensions': ['.js', '.css', '.csv'], 'hash_size': 5 }
+cache_buster = CacheBuster(config=config)
+cache_buster.init_app(app)
 
 mongo = PyMongo(app)
 db = mongo.db
