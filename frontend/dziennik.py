@@ -12,6 +12,7 @@ import json
 import os
 
 import uzytkownik as uz
+import group
 
 
 print = pprint.pprint
@@ -155,7 +156,6 @@ def tworz_uzytkownika_page():
                             "telefon": temp_telefon,
                             "adres": temp_adres,
                             "login": temp_email,            # TODO usunąć LOGIN, nie potrzebujemy go, korzystamy jedynie z adresu email
-                            "mail": temp_email              # TODO zmienić "mail" na "email" w bazie danych
                         }
 
                         nowy_uzytkownik = uz.Uzytkownik(properties=temp_properties, db=db)
@@ -167,7 +167,54 @@ def tworz_uzytkownika_page():
 
     return redirect(url_for("data_problem"))
 
+@app.route("/addClass", methods=["POST", "GET"])
+def add_class_page():
+    if "status" in session:
+        if session["status"] == "loggedIn":
+            temp_sections = session["sections"]
+            flag_is_allowed = False
+            for temp_section in temp_sections:
+                if temp_section["name"] == "addClassPage":
+                    flag_is_allowed = True
+                    break
+            if flag_is_allowed:
+                if request.method == "POST":
+                    operation = request.form["operacja"]
+                    if operation == "create":
+                        properties = {
+                            "nazwa" : request.form["class_name"],
+                            "rok-rozpoczecia": request.form["first_year"],
+                            "uczniowie": []
+                        }
+                        group.add_group(db=db, properties=properties)
+                        popup = "Poprawnie dodano grupę"
+                    elif operation == "add_students":
+                        how_many_new_users = int(request.form["hidden"])
+                        group_name = request.form["group_name"]
+                        for iterator in range(how_many_new_users + 1):
+                            # print(request.form["email_" + str(iterator)])
+                            student = uz.Uzytkownik(db=db, login=request.form["email_" + str(iterator)])
+                            student_id = student.properties["_id"]
+                            group.add_student(db=db, group_name=group_name, student_id=student_id)
+                            popup = "Poprawnie dodano uczniów do grupy"
+                    elif operation == "remove_students":
+                        how_many_new_users = int(request.form["hidden"])
+                        group_name = request.form["group_name"]
+                        for iterator in range(how_many_new_users + 1):
+                            # print(request.form["email_" + str(iterator)])
+                            student = uz.Uzytkownik(db=db, login=request.form["email_" + str(iterator)])
+                            student_id = student.properties["_id"]
+                            group.remove_student(db=db, group_name=group_name, student_id=student_id)
+                            popup = "Poprawnie usunięto uczniów z grupy"
+                    list_of_students = uz.Uzytkownik.get_all_users(db=db)
+                    group_names = group.get_all_group_names(db=db)
+                    return render_template("addClass.html", listOfStudents=list_of_students, groupNames=group_names, popups=[popup])
+                else:
+                    list_of_students = uz.Uzytkownik.get_all_users(db=db)
+                    group_names = group.get_all_group_names(db=db)
+                    return render_template("addClass.html", listOfStudents=list_of_students, groupNames=group_names)
 
+    return redirect(url_for("data_problem"))
 
 
 @app.route("/main/ukladajPlan")
@@ -212,13 +259,13 @@ if __name__ == "__main__":
     if db.uzytkownicy.find_one({"login": "admin"}) is None:
         admin_user_0 = {"login": "admin",
                         "haslo": "admin",
-                        "imie": "Admin",
+                        "imie": "Administrator",
                         "nazwisko": "",
-                        "mail": "",
+                        "email": "admin@mail.to",
                         "telefon": "",
                         "rola": "admin"
                         }
         db.uzytkownicy.insert_one(admin_user_0)
     db.uzytkownicy.create_index([('login', pymongo.ASCENDING)], unique=True)
-    db.uzytkownicy.create_index([('mail', pymongo.ASCENDING)], unique=True)
+    db.uzytkownicy.create_index([('email', pymongo.ASCENDING)], unique=True)
     app.run(debug=True)

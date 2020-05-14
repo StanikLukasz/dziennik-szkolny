@@ -1,0 +1,119 @@
+{% extends "loggedInBase.html" %}
+{% block title%}Dodaj użytkowników{% endblock %}
+{% block innerHead %}
+    <link rel="stylesheet" href="{{url_for('static', filename='stylesheets/addClassPage.css')}}">
+{% endblock %}
+
+
+{% block middle %}
+
+{% if popups!=[] %}
+    <div class="popups">
+        {% for popup in popups %}
+            <div class="popup">
+                {{ popup }}
+                <a onclick="this.parentNode.style['display'] = 'none'">X</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<div id="listaUczniow">
+    <table id="listaUczniow">
+    <caption>Lista uczniów</caption>
+        <tr>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>e-mail</th>
+{#            <th>Obecna klasa</th>#}
+        </tr>
+        {% for student in listOfStudents %}
+            <tr>
+                <td>{{ student['imie'] }}</td>
+                <td>{{ student['nazwisko'] }}</td>
+                <td>{{ student['email'] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="container" id="addClass">
+    <h2> Dodawanie klasy </h2><br>
+    <form class="forms" action="#" method="post">
+            <input class="hidden" name="operacja" id="operacja" type="text" value="create">
+            <div>Nazwa klasy</div>
+            <div>Rok rozpoczęcia nauki</div>
+
+            <input type="text" id="class_name" name="class_name">
+            <input type="number" id="first_year" name="first_year" {# min="1960" max="2100" #}>
+
+            <div class="button">
+                <input type="submit" value="Utwórz klasę">
+            </div>
+    </form>
+</div><br><br><br>
+
+<div class="container" id="editClass">
+    <h2> Edytowanie klasy </h2><br>
+    <form class="forms" action="#" method="post">
+
+        <input class="hidden" name="hidden" id="hidden" type="number" value="0">
+        <div>Operacja</div>
+        <select id="operacja" name="operacja">
+            <option value="add_students" selected="selected">Dodaj uczniów do klasy</option>
+            <option value="remove_students">Usuń uczniów z klasy</option>
+        </select><br>
+
+        <div>Klasa</div>
+        <select id="group_name" name="group_name">
+            {% for groupName in groupNames %}
+                <option value="{{ groupName }}">{{ groupName }}</option>
+            {% endfor %}
+        </select><br>
+
+        <div>
+            Adresy e-mail uczniów
+        </div>
+
+        <input type="email" id="email_0" name="email_0">
+
+        <div class="hidden" id="spacer"></div>
+
+        <div class="button">
+            <input type="submit" value="Wykonaj">
+        </div>
+    </form>
+
+    <div class="extend">
+        <div class="inner">
+            Stwórz
+        <input type="number" value="1" min="1" max="500" onkeyup="if(parseInt(this.value)>500 || parseInt(this.value)<0){ this.value =0; return false; }">
+        nowych pól
+        </div>
+        <div class="buttonJS" onclick="generateNewForms()">
+
+            Utwórz
+        </div>
+    </div>
+</div>
+
+<script>
+    function generateNewForms(){
+        amount = document.getElementsByClassName("extend")[0].getElementsByTagName("input")[0].value
+        console.log(amount)
+        let temp = amount
+        amount = temp
+
+        ostatni_indeks = parseInt(document.getElementById("hidden").getAttribute("value"))
+        miejsce = document.getElementById("spacer")
+
+        for(i=parseInt(ostatni_indeks)+parseInt(1); i<parseInt(amount)+parseInt(ostatni_indeks)+parseInt(1); i = i+1){
+            miejsce.insertAdjacentHTML('beforebegin', `
+                <input type="email" id="email_${i}" name="email_${i}">
+            `);
+        }
+        document.getElementById("hidden").setAttribute("value", (parseInt(amount) + parseInt(ostatni_indeks)));
+    }
+</script>
+{% endblock %}
