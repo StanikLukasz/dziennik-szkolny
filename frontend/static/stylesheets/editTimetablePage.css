@@ -1,0 +1,91 @@
+.hidden{
+    display: none;
+}
+
+input{
+    height: 3vh;
+    padding: 0.5vh;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 0.5vh;
+}
+
+select{
+    width: 50%;
+}
+
+.container {
+    /*float: left;*/
+    margin: 5vh 3vw;
+}
+
+.forms{
+    width: 50%;
+    float: left;
+
+    display: grid;
+    grid-template-columns: 100%;
+    justify-content: space-around;
+    grid-row-gap: 3px;
+}
+
+form.timetable {
+    width: 50%;
+    float: left;
+
+    display: grid;
+    grid-template-columns: 50% 50%;
+    justify-content: space-around;
+    grid-row-gap: 3px;
+}
+
+table.timetable tr:nth-child(even) {
+  background-color: #eee;
+}
+table.timetable tr:nth-child(odd) {
+  background-color: #fff;
+}
+table.timetable th {
+  color: white;
+  background-color: black;
+}
+
+/*div.timetable {*/
+/*    margin: 1vh 1vw;*/
+/*    height: 40vh;*/
+/*    width: 30vw;*/
+/*    overflow: hidden;*/
+/*    overflow-y: scroll;*/
+/*}*/
+
+
+
+.extend{
+    background: dodgerblue;
+    display: inline-block;
+    height: 5vh;
+    padding: 1vh;
+    border-radius: 3.5vh;
+    color: white;
+    margin-top: 2vh;
+
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+
+}
+
+.extend > .inner{
+    width: 50%;
+}
+
+.extend > .inner > input{
+    width: 20%
+}
+
+.extend > .buttonJS{
+    border: 1px solid white;
+    padding: 1vh 2vh;
+    border-radius: 0.5vh;
+}

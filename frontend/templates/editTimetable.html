@@ -1,0 +1,159 @@
+{% extends "loggedInBase.html" %}
+{% block title%}Dodaj użytkowników{% endblock %}
+{% block innerHead %}
+    <link rel="stylesheet" href="{{url_for('static', filename='stylesheets/editTimetablePage.css')}}">
+{% endblock %}
+
+
+{% block middle %}
+
+{% if popups!=[] %}
+    <div class="popups">
+        {% for popup in popups %}
+            <div class="popup">
+                {{ popup }}
+                <a onclick="this.parentNode.style['display'] = 'none'">X</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<div class="container" id="chooseParameters">
+    <form class="forms" action="#" method="get">
+        <div>Klasa</div>
+        <select id="group_name" name="group_name">
+        {% if groupNames is defined %}
+            {% for groupName in groupNames %}
+                <option value="{{ groupName }}">{{ groupName }}</option>
+            {% endfor %}
+        {% endif %}
+        </select>
+
+        {% if chosenGroupName != None %}
+            <div class="container">
+                <table class="timetable">
+                    <caption>Plan zajęć klasy</caption>
+                    <tr>
+                        <th>Poniedziałek</th>
+                        <th>Wtorek</th>
+                        <th>Środa</th>
+                        <th>Czwartek</th>
+                        <th>Piątek</th>
+                    </tr>
+                    {% for weekday in groupTimetable %}
+                        <tr>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <div>Nauczyciel</div>
+        <select id="teacher" name="teacher">
+        {% if teacherNames is defined %}
+            {% for teacher in teacherNames %}
+                <option value="{{ teacher }}">{{ teacher }}</option>
+            {% endfor %}
+        {% endif %}
+        </select>
+
+        {% if chosenTeacher != None %}
+            <div class="container">
+                <table class="timetable">
+                    <caption>Plan zajęć nauczyciela</caption>
+                    <tr>
+                        <th>Poniedziałek</th>
+                        <th>Wtorek</th>
+                        <th>Środa</th>
+                        <th>Czwartek</th>
+                        <th>Piątek</th>
+                    </tr>
+                    {% for weekday in teacherTimetable %}
+                        <tr>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <div>Sala</div>
+        <input type="text" id="classroom" name="classroom">
+
+
+        {% if chosenClassroom != None %}
+            <div class="container">
+                <table class="timetable">
+                    <caption>Plan zajęć sali</caption>
+                    <tr>
+                        <th>Poniedziałek</th>
+                        <th>Wtorek</th>
+                        <th>Środa</th>
+                        <th>Czwartek</th>
+                        <th>Piątek</th>
+                    </tr>
+                    {% for weekday in classroomTimetable %}
+                        <tr>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                            <td>wolne</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <div class="button">
+            <input type="submit" value="Planuj zajęcia">
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <h2> Dodaj zajęcia </h2><br>
+    <form class="editTimetable" action="#" method="post">
+
+        <div>Dzień tygodnia</div>
+        <select id="weekday" name="weekday">
+            <option value="monday">Poniedziałek</option>
+            <option value="tuesday">Wtorek</option>
+            <option value="wednesday">Środa</option>
+            <option value="thursday">Czwartek</option>
+            <option value="friday">Piątek</option>
+        </select><br>
+
+        <div>Lekcja</div>
+        <select id="lesson" name="lesson">
+            <option value="lesson1">Lekcja 1</option>
+            <option value="lesson2">Lekcja 2</option>
+            <option value="lesson3">Lekcja 3</option>
+            <option value="lesson4">Lekcja 4</option>
+            <option value="lesson5">Lekcja 5</option>
+            <option value="lesson6">Lekcja 6</option>
+            <option value="lesson7">Lekcja 7</option>
+            <option value="lesson8">Lekcja 8</option>
+        </select><br>
+
+        <div>Nazwa przedmiotu</div>
+        <input type="text" id="subject" name="subject">
+
+        <div class="button">
+            <input type="submit" value="Dodaj zajęcia">
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}
