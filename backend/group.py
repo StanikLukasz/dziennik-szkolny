@@ -15,10 +15,11 @@ def get_all_group_names(db):
 
 
 def add_student(db, group_name, student_id):
-    db.grupy.update_one(
+    abc = db.grupy.update_one(
         {"nazwa": group_name},
         {"$addToSet": {"uczniowie": student_id}}
     )
+    return abc.acknowledged     # metoda zwraca, czy dodanie do klasy się powiodło
 
 
 def remove_student(db, group_name, student_id):

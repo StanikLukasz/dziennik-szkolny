@@ -136,7 +136,10 @@ def tworz_uzytkownika_page():
                 if request.method == "POST":
                     how_many_new_users = int(request.form["hidden"])
 
-                    for iterator in range(how_many_new_users):
+                    classFlag = False
+                    peopleFlag = True
+
+                    for iterator in range(how_many_new_users + 1):
                         temp_imie       = request.form["imie_"      + str(iterator)]
                         temp_nazwisko   = request.form["nazwisko_"  + str(iterator)]
                         temp_email      = request.form["email_"     + str(iterator)]
@@ -158,14 +161,27 @@ def tworz_uzytkownika_page():
 
                         nowy_uzytkownik = uz.Uzytkownik(properties=temp_properties, db=db)
 
-                    popup = "Poprawnie dodano {} nowych użytkowników.".format(how_many_new_users+1)
+                        operacja = request.form["operacja"]
+                        popup = "Operacja to {}".format(operacja)
+                        if request.form["operacja"]=="klasa":
+                            group_name = request.form["group_name"]
+                            student_id = nowy_uzytkownik.get_user_id()
+                            if(group.add_student(db=db, group_name=group_name, student_id=student_id)):
+                                classFlag = True
+                    popups = []
+                    if classFlag:
+                        popups.append("Dodano użytkowników do tej klasy.")
+                    if peopleFlag:
+                        popups.append("Poprawnie dodano {} nowych użytkowników.".format(how_many_new_users+1))
+
                     group_names = group.get_all_group_names(db=db)
-                    return render_template("tworzUzytkownika.html", groupNames=group_names,  popups=[popup]) #"Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)
+                    return render_template("tworzUzytkownika.html", groupNames=group_names,  popups=popups) #"Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)
                 else:
                     group_names = group.get_all_group_names(db=db)
                     return render_template("tworzUzytkownika.html", groupNames=group_names)
 
     return redirect(url_for("data_problem"))
+
 
 @app.route("/addClass", methods=["POST", "GET"])
 def add_class_page():
