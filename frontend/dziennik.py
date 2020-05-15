@@ -161,8 +161,6 @@ def tworz_uzytkownika_page():
 
                         nowy_uzytkownik = uz.Uzytkownik(properties=temp_properties, db=db)
 
-                        operacja = request.form["operacja"]
-                        popup = "Operacja to {}".format(operacja)
                         if request.form["operacja"]=="klasa":
                             group_name = request.form["group_name"]
                             student_id = nowy_uzytkownik.get_user_id()
