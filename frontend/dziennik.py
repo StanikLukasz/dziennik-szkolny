@@ -231,9 +231,74 @@ def add_class_page():
     return redirect(url_for("data_problem"))
 
 
-@app.route("/main/ukladajPlan")
-def ukladaj_plan_page():
-    return "placeholder"
+@app.route("/editTimetable", methods=["POST", "GET"])
+def edit_timetable_page():
+    if "status" in session:
+        if session["status"] == "loggedIn":
+            temp_sections = session["sections"]
+            flag_is_allowed = False
+            for temp_section in temp_sections:
+                if temp_section["name"] == "editTimetablePage":
+                    flag_is_allowed = True
+                    break
+            if flag_is_allowed:
+                if request.method == "POST":
+                    operation = request.form["operacja"]
+                    if operation == "create":
+                        properties = {
+                            "nazwa" : request.form["class_name"],
+                            "rok-rozpoczecia": request.form["first_year"],
+                            "uczniowie": []
+                        }
+                        group.add_group(db=db, properties=properties)
+                        popup = "Poprawnie dodano grupę"
+                    elif operation == "add_students":
+                        how_many_new_users = int(request.form["hidden"])
+                        group_name = request.form["group_name"]
+                        for iterator in range(how_many_new_users + 1):
+                            # print(request.form["email_" + str(iterator)])
+                            student = uz.Uzytkownik(db=db, login=request.form["email_" + str(iterator)])
+                            student_id = student.properties["_id"]
+                            group.add_student(db=db, group_name=group_name, student_id=student_id)
+                            popup = "Poprawnie dodano uczniów do grupy"
+                    elif operation == "remove_students":
+                        how_many_new_users = int(request.form["hidden"])
+                        group_name = request.form["group_name"]
+                        for iterator in range(how_many_new_users + 1):
+                            # print(request.form["email_" + str(iterator)])
+                            student = uz.Uzytkownik(db=db, login=request.form["email_" + str(iterator)])
+                            student_id = student.properties["_id"]
+                            group.remove_student(db=db, group_name=group_name, student_id=student_id)
+                            popup = "Poprawnie usunięto uczniów z grupy"
+                    list_of_students = uz.Uzytkownik.get_all_users(db=db)
+                    group_names = group.get_all_group_names(db=db)
+                    return render_template("editTimetable.html", listOfStudents=list_of_students, groupNames=group_names, popups=[popup])
+                else:
+                    chosen_group_name = request.args.get("group_name")
+                    chosen_teacher = request.args.get("teacher")
+                    chosen_classroom = request.args.get("classroom")
+                    teachers = uz.Uzytkownik.get_all_teachers(db)
+                    teacher_names = set()
+                    for teacher in teachers:
+                        print(teacher)
+                        teacher_names.add(teacher["imie"] + " " + teacher["nazwisko"])
+                    group_names = group.get_all_group_names(db=db)
+                    # dev
+                    group_timetable = {"monday": {}, "tuesday": {}, "wednesday": {}, "thursday": {}, "friday": {}}
+                    teacher_timetable = {"monday": {}, "tuesday": {}, "wednesday": {}, "thursday": {}, "friday": {}}
+                    classroom_timetable = {"monday": {}, "tuesday": {}, "wednesday": {}, "thursday": {}, "friday": {}}
+                    return render_template("editTimetable.html",
+                                           groupNames=group_names,
+                                           teacherNames=teacher_names,
+                                           chosenGroupName=chosen_group_name,
+                                           chosenTeacher=chosen_teacher,
+                                           chosenClassroom=chosen_classroom,
+                                           groupTimetable=group_timetable,
+                                           teacherTimetable=teacher_timetable,
+                                           classroomTimetable=classroom_timetable,
+                                           )
+
+    return redirect(url_for("data_problem"))
 
 
 @app.route("/logout", methods=["POST", "GET"])

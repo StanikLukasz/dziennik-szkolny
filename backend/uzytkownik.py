@@ -23,3 +23,7 @@ class Uzytkownik:   # trzeba dodać hasła i sprawdzanie haseł (nawet jeśli pr
     @staticmethod
     def get_all_users(db):
         return db.uzytkownicy.find()
+
+    @staticmethod
+    def get_all_teachers(db):
+        return db.uzytkownicy.find({"rola": "nauczyciel"})

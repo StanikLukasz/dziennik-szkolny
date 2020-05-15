@@ -1,4 +1,10 @@
 {
   "rola": "dyrektor",
-  "sections": ["static/sections/boardPage.json", "static/sections/addUsersPage.json", "static/sections/logoutPage.json"]
+  "sections": [
+    "static/sections/boardPage.json",
+    "static/sections/addUsersPage.json",
+    "static/sections/addClassPage.json",
+    "static/sections/editTimetablePage.json",
+    "static/sections/logoutPage.json"
+  ]
 }
