@@ -269,7 +269,7 @@ if __name__ == "__main__":
     uz1 = uz.Uzytkownik()
     uz1.properties = {"sdfsdf": "sdsdfb", "sdfbsd": "sdifbdsiuf"}
 
-    db.uzytkownicy.drop()
+    #db.uzytkownicy.drop()
 
     print("DEBUG: dziennik - główny moduł")
     if db.uzytkownicy.find_one({"login": "admin"}) is None:
