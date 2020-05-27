@@ -135,6 +135,10 @@ def tworz_uzytkownika_page():
             if flag_is_allowed:
                 if request.method == "POST":
                     how_many_new_users = int(request.form["hidden"])
+                    how_many_succeed = 0
+                    how_many_failed = 0
+                    how_many_incomplete = 0
+                    how_many_skipped = 0
 
                     classFlag = False
                     peopleFlag = True
@@ -148,6 +152,19 @@ def tworz_uzytkownika_page():
                         temp_telefon    = request.form["telefon_"   + str(iterator)]
                         temp_adres      = request.form["adres_"     + str(iterator)]
 
+                        print(temp_imie)
+                        print(temp_nazwisko)
+                        print(temp_email)
+                        print(temp_nazwisko)
+
+                        if temp_imie == "" and temp_nazwisko == "" and temp_email == "" and temp_password == "":    # jeśli nie wprowadzono danych
+                            how_many_skipped += 1
+                            continue
+
+                        if temp_imie == "" or temp_nazwisko == "" or temp_email == "" or temp_password == "":       # jeśli dane są niekompletne
+                            how_many_incomplete += 1
+                            continue
+
                         temp_properties = {
                             "imie": temp_imie,
                             "nazwisko": temp_nazwisko,
@@ -159,18 +176,33 @@ def tworz_uzytkownika_page():
                             "login": temp_email,            # TODO usunąć LOGIN, nie potrzebujemy go, korzystamy jedynie z adresu email
                         }
 
-                        nowy_uzytkownik = uz.Uzytkownik(properties=temp_properties, db=db)
+                        try:
+                            nowy_uzytkownik = uz.Uzytkownik(properties=temp_properties, db=db)
+                            how_many_succeed += 1
+                            if request.form["operacja"]=="klasa":
+                                group_name = request.form["group_name"]
+                                student_id = nowy_uzytkownik.get_user_id()
+                                if(group.add_student(db=db, group_name=group_name, student_id=student_id)):
+                                    classFlag = True
+                        except:
+                            how_many_failed += 1
 
-                        if request.form["operacja"]=="klasa":
-                            group_name = request.form["group_name"]
-                            student_id = nowy_uzytkownik.get_user_id()
-                            if(group.add_student(db=db, group_name=group_name, student_id=student_id)):
-                                classFlag = True
+
+
                     popups = []
                     if classFlag:
-                        popups.append("Dodano użytkowników do tej klasy.")
+                        if how_many_succeed > 0:
+                            popups.append("Dodano {} użytkowników do tej klasy.".format(how_many_succeed))
+
                     if peopleFlag:
-                        popups.append("Poprawnie dodano {} nowych użytkowników.".format(how_many_new_users+1))
+                        if how_many_succeed > 0:
+                            popups.append("Poprawnie dodano {} nowych użytkowników.".format(how_many_succeed))
+                    if how_many_incomplete > 0:
+                        popups.append("Dane {} użytkowników były niekompletne - nie zostali dodani.".format(how_many_incomplete))
+                    if how_many_skipped > 0:
+                        popups.append("Pominięto {} pustych wierszy.".format(how_many_skipped))
+                    if how_many_failed > 0:
+                        popups.append("{} użytkowników już istnieje w systemie.".format(how_many_failed))
 
                     group_names = group.get_all_group_names(db=db)
                     return render_template("tworzUzytkownika.html", groupNames=group_names,  popups=popups) #"Nowy uzytkownik o danych {} został utworzony".format(nowy_uzytkownik.properties)

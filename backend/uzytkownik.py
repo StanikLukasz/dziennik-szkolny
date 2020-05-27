@@ -1,6 +1,6 @@
 import re
 
-class Uzytkownik:   # trzeba dodać hasła i sprawdzanie haseł (nawet jeśli proste bez hashowania)
+class Uzytkownik:
 
     def __init__(self, properties=dict(), db=None, login=None):
         if login is None:
