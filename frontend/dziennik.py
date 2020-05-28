@@ -118,12 +118,16 @@ def main_page():
             # temp_klasa = # TODO stworzyć metodę i pobrać nazwę klasy do której należy uczeń
             wiad_osoby = tablica.top5_wiadomosci_osoby(temp_email)
             wiad_roli  = tablica.top5_wiadomosci_roli(temp_rola)
-            # wiad_klasy = tablica.top5_wiadomosci_klasy(temp_klasa)
+            #wiad_klasy = tablica.top5_wiadomosci_klasy(temp_klasa)
 
             lista_wiadomosci = []
             for i in wiad_osoby:
                 i["formattedDate"] = utility.czas_zformatowany(i["czas"])
                 lista_wiadomosci.append(i)
+
+            #for i in wiad_klasy:
+            #    i["formattedDate"] = utility.czas_zformatowany(i["czas"])
+            #    lista_wiadomosci.append(i)
 
             for i in wiad_roli:
                 i["formattedDate"] = utility.czas_zformatowany(i["czas"])
@@ -136,19 +140,6 @@ def main_page():
             return redirect(url_for("login_page"))
         # zakładajmy, że każdy użytkownik: admin, nauczyciel, rodzic, uczeń zaczynają od "tablicy powiadomień"
         # a potem dopiero poprzez menu idą do odpowiednich sekcji
-
-    #    if "email" in session:  # tu jest poprawna sesja
-    #        email = session["email"]
-    #        if "rola" in session:
-    #            rola = session["rola"]
-    #            if rola == "admin":
-    #                return render_template("adminMainPage.html", rola=rola)
-    #            else:
-    #                return render_template("boardPage.html", email=email)
-    #        else:
-    #            return render_template("boardPage.html", email=email)
-    #    else:
-    #        return redirect(url_for("loginPage"))
 
     else:
         return redirect(url_for("login_page"))
@@ -202,6 +193,8 @@ def tworz_uzytkownika_page():
                             "adres": temp_adres,
                             "login": temp_email,            # TODO usunąć LOGIN, nie potrzebujemy go, korzystamy jedynie z adresu email
                         }
+                        if request.form["operacja"] == "klasa":
+                            temp_properties["klasa"] = request.form["group_name"]
 
                         try:
                             nowy_uzytkownik = uz.Uzytkownik(properties=temp_properties, db=db)
@@ -214,10 +207,7 @@ def tworz_uzytkownika_page():
                                     tablica.wstaw_wiadomosc_osobie("Zostales dodany do klasy {}.".format(group_name), temp_email)
                             else:
                                 tablica.wstaw_wiadomosc_osobie("Zostales dodany do systemu.", temp_email)
-                                #temp_tresc = tablica.top5_wiadomosci_osoby(email=temp_email)
-                                #print(type(temp_tresc))
-                                #for i in temp_tresc:
-                                #    print(i)
+
                             how_many_succeed += 1
                         except:
                             how_many_failed += 1
