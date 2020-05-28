@@ -1,6 +1,5 @@
 from datetime import datetime
 
-
 def czas_teraz():
     czas = datetime.now()
     czas_2 = datetime.fromtimestamp(0)

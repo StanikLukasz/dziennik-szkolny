@@ -1,6 +1,6 @@
 {
   "name": "editTimetablePage",
-  "icon": "images/icons/baseline_chrome_reader_mode_black_36dp.png",
+  "icon": "images/icons/baseline_calendar_today_black_36dp.png",
   "displayName": "Układaj plan zajęć",
   "href": "editTimetable"
 }
