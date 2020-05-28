@@ -89,7 +89,7 @@ def login_page():
             for x in permission_data["sections"]:
 
                 inner_file_path = os.path.join(current_directory, x)
-                with open(inner_file_path) as json_file_2:
+                with open(inner_file_path, encoding='utf-8') as json_file_2:
 
                     temp_data = json.loads(json_file_2.read())
                     session["sections"].append(temp_data)
