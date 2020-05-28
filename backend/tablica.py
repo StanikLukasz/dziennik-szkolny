@@ -7,8 +7,9 @@ class Tablica:
     def __init__(self, db=None):
         self.db = db
 
-    def wstaw_wiadomosc_roli(self, wiadomosc, rola):
-        temp_time = utility.czas_teraz()
+    def wstaw_wiadomosc_roli(self, wiadomosc, rola, temp_time=0):
+        if temp_time == 0:
+            temp_time = utility.czas_teraz()
         ogloszenie = {
             "rola": rola,
             "tresc": wiadomosc,
@@ -19,8 +20,9 @@ class Tablica:
         except:
             print("Nie powiodło się dodawanie ogloszenia dla roli {}".format(rola))
 
-    def wstaw_wiadomosc_klasie(self, wiadomosc, klasa):
-        temp_time = utility.czas_teraz()
+    def wstaw_wiadomosc_klasie(self, wiadomosc, klasa, temp_time=0):
+        if temp_time == 0:
+            temp_time = utility.czas_teraz()
         ogloszenie = {
             "klasa": klasa,
             "tresc": wiadomosc,
@@ -31,8 +33,9 @@ class Tablica:
         except:
             print("Nie powiodło się dodawanie ogloszenia dla klasy {}".format(klasa))
 
-    def wstaw_wiadomosc_osobie(self, wiadomosc, email):
-        temp_time = utility.czas_teraz()
+    def wstaw_wiadomosc_osobie(self, wiadomosc, email, temp_time=0):
+        if temp_time == 0:
+            temp_time = utility.czas_teraz()
         ogloszenie = {
             "email": email,
             "tresc": wiadomosc,

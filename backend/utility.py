@@ -6,6 +6,10 @@ def czas_teraz():
     czas_2 = datetime.fromtimestamp(0)
     return (czas - czas_2).total_seconds()
 
+def czas_pozniej(datetime_temp):
+    czas = datetime_temp
+    czas_2 = datetime.fromtimestamp(0)
+    return (czas - czas_2).total_seconds()
 
 def czas_zformatowany(czas_w_sekundach):
     return datetime.fromtimestamp(czas_w_sekundach).strftime("%Y-%m-%d %H:%M")
