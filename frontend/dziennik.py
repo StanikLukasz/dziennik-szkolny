@@ -310,33 +310,7 @@ def edit_timetable_page():
                     break
             if flag_is_allowed:
                 if request.method == "POST":
-                    operation = request.form["operacja"]
-                    if operation == "create":
-                        properties = {
-                            "nazwa" : request.form["class_name"],
-                            "rok-rozpoczecia": request.form["first_year"],
-                            "uczniowie": []
-                        }
-                        group.add_group(db=db, properties=properties)
-                        popup = "Poprawnie dodano grupę"
-                    elif operation == "add_students":
-                        how_many_new_users = int(request.form["hidden"])
-                        group_name = request.form["group_name"]
-                        for iterator in range(how_many_new_users + 1):
-                            # print(request.form["email_" + str(iterator)])
-                            student = uz.Uzytkownik(db=db, login=request.form["email_" + str(iterator)])
-                            student_id = student.properties["_id"]
-                            group.add_student(db=db, group_name=group_name, student_id=student_id)
-                            popup = "Poprawnie dodano uczniów do grupy"
-                    elif operation == "remove_students":
-                        how_many_new_users = int(request.form["hidden"])
-                        group_name = request.form["group_name"]
-                        for iterator in range(how_many_new_users + 1):
-                            # print(request.form["email_" + str(iterator)])
-                            student = uz.Uzytkownik(db=db, login=request.form["email_" + str(iterator)])
-                            student_id = student.properties["_id"]
-                            group.remove_student(db=db, group_name=group_name, student_id=student_id)
-                            popup = "Poprawnie usunięto uczniów z grupy"
+                    popup = "Poprawnie zmodyfikowano plan"
                     list_of_students = uz.Uzytkownik.get_all_users(db=db)
                     group_names = group.get_all_group_names(db=db)
                     return render_template("editTimetable.html", listOfStudents=list_of_students, groupNames=group_names, popups=[popup])
