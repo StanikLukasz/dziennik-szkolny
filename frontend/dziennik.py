@@ -31,8 +31,10 @@ mongo = PyMongo(app)
 db = mongo.db
 tablica = tab.Tablica(db=db)
 
+flag_refresh_messages = True;
 
-#db.tablica.remove()     # czyszczenie poprzednich wiadomosci
+if flag_refresh_messages:
+    db.tablica.remove()     # czyszczenie poprzednich wiadomosci
 for rola in ["admin", "dyrektor", "nauczyciel", "rodzic", "uczen"]:
     tablica.wstaw_wiadomosc_roli("Witaj w aplikacji!", rola)
 
@@ -118,37 +120,26 @@ def main_page():
             # temp_klasa = # TODO stworzyć metodę i pobrać nazwę klasy do której należy uczeń
             wiad_osoby = tablica.top5_wiadomosci_osoby(temp_email)
             wiad_roli  = tablica.top5_wiadomosci_roli(temp_rola)
-            # wiad_klasy = tablica.top5_wiadomosci_klasy(temp_klasa)
+            #wiad_klasy = tablica.top5_wiadomosci_klasy(temp_klasa)
 
             lista_wiadomosci = []
             for i in wiad_osoby:
                 i["formattedDate"] = utility.czas_zformatowany(i["czas"])
                 lista_wiadomosci.append(i)
 
+            #for i in wiad_klasy:
+            #    i["formattedDate"] = utility.czas_zformatowany(i["czas"])
+            #    lista_wiadomosci.append(i)
+
             for i in wiad_roli:
                 i["formattedDate"] = utility.czas_zformatowany(i["czas"])
                 lista_wiadomosci.append(i)
-
-
 
             return render_template("boardPage.html", session=session, wiadomosci=lista_wiadomosci)
         else:
             return redirect(url_for("login_page"))
         # zakładajmy, że każdy użytkownik: admin, nauczyciel, rodzic, uczeń zaczynają od "tablicy powiadomień"
         # a potem dopiero poprzez menu idą do odpowiednich sekcji
-
-    #    if "email" in session:  # tu jest poprawna sesja
-    #        email = session["email"]
-    #        if "rola" in session:
-    #            rola = session["rola"]
-    #            if rola == "admin":
-    #                return render_template("adminMainPage.html", rola=rola)
-    #            else:
-    #                return render_template("boardPage.html", email=email)
-    #        else:
-    #            return render_template("boardPage.html", email=email)
-    #    else:
-    #        return redirect(url_for("loginPage"))
 
     else:
         return redirect(url_for("login_page"))
@@ -202,6 +193,8 @@ def tworz_uzytkownika_page():
                             "adres": temp_adres,
                             "login": temp_email,            # TODO usunąć LOGIN, nie potrzebujemy go, korzystamy jedynie z adresu email
                         }
+                        if request.form["operacja"] == "klasa":
+                            temp_properties["klasa"] = request.form["group_name"]
 
                         try:
                             nowy_uzytkownik = uz.Uzytkownik(properties=temp_properties, db=db)
@@ -214,10 +207,7 @@ def tworz_uzytkownika_page():
                                     tablica.wstaw_wiadomosc_osobie("Zostales dodany do klasy {}.".format(group_name), temp_email)
                             else:
                                 tablica.wstaw_wiadomosc_osobie("Zostales dodany do systemu.", temp_email)
-                                #temp_tresc = tablica.top5_wiadomosci_osoby(email=temp_email)
-                                #print(type(temp_tresc))
-                                #for i in temp_tresc:
-                                #    print(i)
+
                             how_many_succeed += 1
                         except:
                             how_many_failed += 1
@@ -367,13 +357,11 @@ def send_message_page():
                         group_name = request.form["group_name"]
                         tablica.wstaw_wiadomosc_klasie(wiadomosc, group_name)
                         tablica.wstaw_wiadomosc_osobie("Wysłałeś wiadomość klasie {}".format(group_name), session["email"])
-                        print(session["email"])
                         popups.append("Poprawnie wysłano wiadomość klasie {}".format(group_name))
                     else:
                         user_email = request.form["email_name"]
                         tablica.wstaw_wiadomosc_osobie(wiadomosc, user_email)
                         tablica.wstaw_wiadomosc_osobie("Wysłałeś wiadomość osobie {}".format(user_email), session["email"])
-                        print(session["email"])
                         popups.append("Poprawnie wysłano wiadomość {}".format(user_email))
 
                     list_of_students = uz.Uzytkownik.get_all_users(db=db)
@@ -385,12 +373,6 @@ def send_message_page():
                     return render_template("sendMessagePage.html", listOfStudents=list_of_students, groupNames=group_names)
 
     return redirect(url_for("data_problem"))
-
-
-
-
-
-
 
 
 
@@ -455,7 +437,4 @@ if __name__ == "__main__":
 
     if db.tablica.find_one({"rola": "admin"}) is None:
         for rola in ["admin", "dyrektor", "nauczyciel", "rodzic", "uczen"]:
-            print(rola)
             tablica.wstaw_wiadomosc_roli("Witaj w aplikacji!", rola)
-
-
