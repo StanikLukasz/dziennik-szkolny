@@ -1,14 +1,35 @@
 {% extends "loggedInBase.html" %}
 {% block title%}Tablica{% endblock %}
 {% block innerHead %}
-
+<link rel="stylesheet" href="{{url_for('static', filename='stylesheets/boardPage.css')}}">
 {% endblock %}
 
 
 {% block middle %}
-<div style="text-align: center">
-    Tablica powiadomień
+
+
+<div class="tablica">
+    <div class="tytul">
+        Tablica powiadomień
+    </div>
+    {% for wiadomosc in wiadomosci %}
+        <div class="wiadomosc">
+            <div class="tresc">
+                {{ wiadomosc.tresc }}
+            </div>
+            <div class="data">
+                {{ wiadomosc.formattedDate }}
+            </div>
+        </div>
+    {% endfor %}
+
+
 </div>
+
+
+
+
+
 
 
 

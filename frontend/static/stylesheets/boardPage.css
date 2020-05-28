@@ -1,0 +1,44 @@
+.tablica{
+    font-size: 20px;
+    text-align: center;
+    background: white;
+    width: 80%;
+    margin: 5vh auto;
+
+    border-radius: 5vh;
+}
+
+.tablica > .tytul{
+    border-radius: inherit;
+    background: dodgerblue;
+    color: white;
+    padding: 2vh;
+}
+
+.tablica > .wiadomosc{
+    padding: 2vh 0;
+}
+
+.tablica > .wiadomosc::after{
+    content: '';
+    width: 80%;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    display: block;
+    margin: 2vh auto 0 auto;
+}
+
+.tablica > .wiadomosc:last-of-type::after{
+    border-bottom: none;
+}
+
+.tablica > .data{
+    text-align: right;
+}
+
+.wiadomosc > .data{
+    color: #444;
+    padding-top: 1vh;
+    padding-right: 5vh;
+    text-align: right;
+    font-size: 80%
+}

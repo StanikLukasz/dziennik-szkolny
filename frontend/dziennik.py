@@ -6,13 +6,15 @@ from flask_cachebuster import CacheBuster
 from flask import Flask, redirect, url_for, render_template, request, session
 from flask_pymongo import PyMongo, pymongo
 from bson.objectid import ObjectId
-from datetime import timedelta
+from datetime import timedelta, datetime
 import pprint
 import json
 import os
 
 import uzytkownik as uz
 import group
+import utility
+import tablica as tab
 
 print = pprint.pprint
 
@@ -27,6 +29,13 @@ cache_buster.init_app(app)
 
 mongo = PyMongo(app)
 db = mongo.db
+tablica = tab.Tablica(db=db)
+
+
+db.tablica.remove()     # czyszczenie poprzednich wiadomosci
+for rola in ["admin", "dyrektor", "nauczyciel", "rodzic", "uczen"]:
+    tablica.wstaw_wiadomosc_roli("Witaj w aplikacji!", rola)
+
 
 @app.route("/")  # jeśli nie jesteś zalogowany -> przekieruj na stronę logowania, w przeciwnym wypadku -> mainPage
 def startPage():
@@ -101,7 +110,28 @@ def login_page():
     "/main")  # rozumiem to jako pierwsza strona, jaką już zalogowany użytkownik zobaczy, czyli tam gdzie będzie lista funkcji i np. tablica
 def main_page():
     if "status" in session:
-        return render_template("boardPage.html", session=session)
+        if session["status"] == "loggedIn":
+            temp_email = session["email"]
+            temp_rola = session["rola"]
+            # temp_klasa = # TODO stworzyć metodę i pobrać nazwę klasy do której należy uczeń
+            wiad_osoby = tablica.top5_wiadomosci_osoby(temp_email)
+            wiad_roli  = tablica.top5_wiadomosci_roli(temp_rola)
+            # wiad_klasy = tablica.top5_wiadomosci_klasy(temp_klasa)
+
+            lista_wiadomosci = []
+            for i in wiad_osoby:
+                i["formattedDate"] = utility.czas_zformatowany(i["czas"])
+                lista_wiadomosci.append(i)
+
+            for i in wiad_roli:
+                i["formattedDate"] = utility.czas_zformatowany(i["czas"])
+                lista_wiadomosci.append(i)
+
+
+
+            return render_template("boardPage.html", session=session, wiadomosci=lista_wiadomosci)
+        else:
+            return redirect(url_for("login_page"))
         # zakładajmy, że każdy użytkownik: admin, nauczyciel, rodzic, uczeń zaczynają od "tablicy powiadomień"
         # a potem dopiero poprzez menu idą do odpowiednich sekcji
 
@@ -152,11 +182,6 @@ def tworz_uzytkownika_page():
                         temp_telefon    = request.form["telefon_"   + str(iterator)]
                         temp_adres      = request.form["adres_"     + str(iterator)]
 
-                        print(temp_imie)
-                        print(temp_nazwisko)
-                        print(temp_email)
-                        print(temp_nazwisko)
-
                         if temp_imie == "" and temp_nazwisko == "" and temp_email == "" and temp_password == "":    # jeśli nie wprowadzono danych
                             how_many_skipped += 1
                             continue
@@ -178,12 +203,20 @@ def tworz_uzytkownika_page():
 
                         try:
                             nowy_uzytkownik = uz.Uzytkownik(properties=temp_properties, db=db)
-                            how_many_succeed += 1
                             if request.form["operacja"]=="klasa":
                                 group_name = request.form["group_name"]
                                 student_id = nowy_uzytkownik.get_user_id()
                                 if(group.add_student(db=db, group_name=group_name, student_id=student_id)):
                                     classFlag = True
+                                    peopleFlag = False
+                                    tablica.wstaw_wiadomosc_osobie("Zostales dodany do klasy {}.".format(group_name), temp_email)
+                            else:
+                                tablica.wstaw_wiadomosc_osobie("Zostales dodany do systemu.", temp_email)
+                                #temp_tresc = tablica.top5_wiadomosci_osoby(email=temp_email)
+                                #print(type(temp_tresc))
+                                #for i in temp_tresc:
+                                #    print(i)
+                            how_many_succeed += 1
                         except:
                             how_many_failed += 1
 
@@ -379,6 +412,20 @@ if __name__ == "__main__":
                         "rola": "admin"
                         }
         db.uzytkownicy.insert_one(admin_user_0)
+        admin_ogloszenie = {
+            "email": "admin@mail.to",
+            "tresc": "Witaj w naszej aplikacji!",
+            "czas": utility.czas_teraz()
+        }
+        db.tablica.insert_one(admin_ogloszenie)
+
     db.uzytkownicy.create_index([('login', pymongo.ASCENDING)], unique=True)
     db.uzytkownicy.create_index([('email', pymongo.ASCENDING)], unique=True)
     app.run(debug=True)
+
+    if db.tablica.find_one({"rola": "admin"}) is None:
+        for rola in ["admin", "dyrektor", "nauczyciel", "rodzic", "uczen"]:
+            print(rola)
+            tablica.wstaw_wiadomosc_roli("Witaj w aplikacji!", rola)
+
+
