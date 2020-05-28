@@ -1,6 +1,6 @@
 {
   "name": "editTimetablePage",
   "icon": "images/icons/baseline_chrome_reader_mode_black_36dp.png",
-  "displayName": "Ukladaj plan zajec",
+  "displayName": "Układaj plan zajęć",
   "href": "editTimetable"
 }

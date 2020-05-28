@@ -1,6 +1,6 @@
 {
   "name": "addClassPage",
   "icon": "images/icons/baseline_account_box_black_36dp.png",
-  "displayName": "Stwórz/edytuj klase",
+  "displayName": "Stwórz/edytuj klasę",
   "href": "addClass"
 }
