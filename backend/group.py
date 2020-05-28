@@ -27,3 +27,5 @@ def remove_student(db, group_name, student_id):
         {"nazwa": group_name},
         {"$pull": {"uczniowie": student_id}}
     )
+
+# TODO stworzyć metodę do wyciągnięcia klasy studenta

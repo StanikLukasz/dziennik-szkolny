@@ -1,0 +1,6 @@
+{
+  "name": "sendMessagePage",
+  "icon": "images/icons/baseline_contact_mail_black_36dp.png",
+  "displayName": "Wyślij powiadomienie",
+  "href": "sendMessage"
+}

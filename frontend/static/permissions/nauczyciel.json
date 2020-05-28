@@ -1,4 +1,8 @@
 {
   "rola": "nauczyciel",
-  "sections": ["static/sections/boardPage.json", "static/sections/logoutPage.json"]
+  "sections": [
+      "static/sections/boardPage.json",
+      "static/sections/sendMessage.json",
+      "static/sections/logoutPage.json"
+  ]
 }

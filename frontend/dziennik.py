@@ -32,7 +32,7 @@ db = mongo.db
 tablica = tab.Tablica(db=db)
 
 
-db.tablica.remove()     # czyszczenie poprzednich wiadomosci
+#db.tablica.remove()     # czyszczenie poprzednich wiadomosci
 for rola in ["admin", "dyrektor", "nauczyciel", "rodzic", "uczen"]:
     tablica.wstaw_wiadomosc_roli("Witaj w aplikacji!", rola)
 
@@ -71,6 +71,8 @@ def login_page():
         # dane sesji:
         session.permanent = True
         session["email"] = form_email
+        if form_email == "admin":
+            session["email"] = "admin@mail.to"
         session["status"] = "loggedIn"
         session["rola"] = rola
         session["user_id"] = user_id
@@ -364,6 +366,60 @@ def edit_timetable_page():
                                            )
 
     return redirect(url_for("data_problem"))
+
+
+@app.route("/sendMessage", methods=["POST", "GET"])
+def send_message_page():
+    if "status" in session:
+        if session["status"] == "loggedIn":
+            temp_sections = session["sections"]
+            flag_is_allowed = False
+            for temp_section in temp_sections:
+                if temp_section["name"] == "sendMessagePage":
+                    flag_is_allowed = True
+                    break
+            if flag_is_allowed:
+                if request.method == "POST":
+                    popups = []
+                    wiadomosc = request.form["tresc"];
+
+                    if wiadomosc == "":
+                        popups.append("Nie możesz wysłać pustej wiadomości.")
+                        list_of_students = uz.Uzytkownik.get_all_users(db=db)
+                        group_names = group.get_all_group_names(db=db)
+                        return render_template("sendMessagePage.html", listOfStudents=list_of_students, groupNames=group_names, popups=popups)
+
+                    if request.form["operacja"] == "klasa":
+                        group_name = request.form["group_name"]
+                        tablica.wstaw_wiadomosc_klasie(wiadomosc, group_name)
+                        tablica.wstaw_wiadomosc_osobie("Wysłałeś wiadomość klasie {}".format(group_name), session["email"])
+                        print(session["email"])
+                        popups.append("Poprawnie wysłano wiadomość klasie {}".format(group_name))
+                    else:
+                        user_email = request.form["email_name"]
+                        tablica.wstaw_wiadomosc_osobie(wiadomosc, user_email)
+                        tablica.wstaw_wiadomosc_osobie("Wysłałeś wiadomość osobie {}".format(user_email), session["email"])
+                        print(session["email"])
+                        popups.append("Poprawnie wysłano wiadomość {}".format(user_email))
+
+                    list_of_students = uz.Uzytkownik.get_all_users(db=db)
+                    group_names = group.get_all_group_names(db=db)
+                    return render_template("sendMessagePage.html", listOfStudents=list_of_students, groupNames=group_names, popups=popups)
+                else:
+                    list_of_students = uz.Uzytkownik.get_all_users(db=db)
+                    group_names = group.get_all_group_names(db=db)
+                    return render_template("sendMessagePage.html", listOfStudents=list_of_students, groupNames=group_names)
+
+    return redirect(url_for("data_problem"))
+
+
+
+
+
+
+
+
+
 
 
 @app.route("/logout", methods=["POST", "GET"])

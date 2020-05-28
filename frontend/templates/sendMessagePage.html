@@ -1,0 +1,68 @@
+{% extends "loggedInBase.html" %}
+{% block title%}Wyślij powiadomienie{% endblock %}
+{% block innerHead %}
+    <link rel="stylesheet" href="{{url_for('static', filename='stylesheets/addUsersPage.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='stylesheets/sendMessagePage.css')}}">
+{% endblock %}
+
+
+{% block middle %}
+
+{% if popups!=[] %}
+    <div class="popups">
+        {% for popup in popups %}
+            <div class="popup">
+                {{ popup }}
+                <a onclick="this.parentNode.style['display'] = 'none'">X</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<form class="forms" action="#" method="post">
+    <input class="hidden" name="hidden" id="hidden" type="number" value="0">
+    <input class="hidden" name="operacja" id="operacja" type="text" value="osoby">
+
+    <div class="tytul">
+        Treść wiadomości
+    </div>
+
+    <input type="text" id="tresc" name="tresc">
+
+    <div class="buttons">
+        <div class="button" style="display:grid; grid-template-columns: auto auto; justify-content: center; grid-column-gap: 10px" onmouseover="setBackToUsers()">
+            <select id="email_name" name="email_name">
+                {% for student in listOfStudents %}
+                    <option value="{{ student["email"] }}">{{ student["email"] }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Wyślij">
+        </div>
+        <div class="button" style="display:grid; grid-template-columns: auto auto; justify-content: center; grid-column-gap: 10px" onmouseover="generateNewClass()">
+            <select id="group_name" name="group_name">
+                {% for groupName in groupNames %}
+                    <option value="{{ groupName }}">{{ groupName }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Wyślij do klasy">
+        </div>
+    </div>
+
+
+
+</form>
+
+<script>
+    function generateNewClass() {
+        document.getElementById("operacja").setAttribute("value", "klasa");
+    }
+    function setBackToUsers(){
+        document.getElementById("operacja").setAttribute("value", "osoby");
+    }
+</script>
+
+
+
+
+{% endblock %}

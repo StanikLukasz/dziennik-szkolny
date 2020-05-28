@@ -1,0 +1,20 @@
+.forms{
+    grid-template-columns: 100%;
+
+}
+
+
+
+#tresc{
+    min-height: 25vh;
+
+
+
+}
+
+.tytul{
+    border-radius: 5vh;
+    background: dodgerblue;
+    color: white;
+    padding: 2vh;
+}
